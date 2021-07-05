@@ -15,7 +15,11 @@ class Notebook:
 
 
 class Cell:
-    pass
+
+    def __init__(self, cell_dict: dict):
+        self.type = cell_dict['cell_type']
+        self.metadata = cell_dict['metadata']
+        self.source = cell_dict['source']
 
 
 class Code(Cell):
