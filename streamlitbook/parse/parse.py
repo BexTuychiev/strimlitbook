@@ -19,7 +19,7 @@ class Cell:
     def __init__(self, cell_dict: dict):
         self._type = cell_dict['cell_type']
         self._metadata = cell_dict['metadata']
-        self.source = cell_dict['source']
+        self._source = cell_dict['source']
 
     @property
     def type(self):
@@ -29,6 +29,9 @@ class Cell:
     def metadata(self):
         return self._metadata
 
+    @property
+    def source(self):
+        return self._source
 
 
 class Code(Cell):
