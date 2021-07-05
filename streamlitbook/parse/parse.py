@@ -9,9 +9,17 @@ class Notebook:
     def __init__(self, path):
         with open(path, 'rb') as file:
             data_dict = json.load(file)
-        self.cells = data_dict['cells']
-        self.n_cells = len(data_dict['cells'])
+        self._cells = [Code(cell) if cell['type'] == 'code' else Markdown(cell) for cell in data_dict['cells']]
+        self.n_cells = len(self._cells)
         self.metadata = data_dict['metadata']
+
+    @property
+    def cells(self):
+        return self._cells
+
+    @cells.deleter
+    def cells(self):
+        raise AttributeError("Cannot delete cells attribute")
 
 
 class Cell:
