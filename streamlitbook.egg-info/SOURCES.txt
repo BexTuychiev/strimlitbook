@@ -1,9 +1,0 @@
-setup.py
-streamlitbook/__init__.py
-streamlitbook/publish.py
-streamlitbook.egg-info/PKG-INFO
-streamlitbook.egg-info/SOURCES.txt
-streamlitbook.egg-info/dependency_links.txt
-streamlitbook.egg-info/top_level.txt
-streamlitbook/parse/__init__.py
-streamlitbook/parse/sample_module.py
