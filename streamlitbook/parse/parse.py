@@ -25,13 +25,25 @@ class Cell:
     def type(self):
         return self._type
 
+    @type.deleter
+    def type(self):
+        raise AttributeError("Cannot delete type attribute...")
+
     @property
     def metadata(self):
         return self._metadata
 
+    @metadata.deleter
+    def metadata(self):
+        raise AttributeError("Cannot delete metadata attribute...")
+
     @property
     def source(self):
         return self._source
+
+    @source.deleter
+    def source(self):
+        raise AttributeError("Cannot delete source attribute")
 
 
 class Code(Cell):
