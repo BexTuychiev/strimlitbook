@@ -4,7 +4,7 @@ A module that contains classes to deal with Jupyter Notebooks
 import json
 
 
-class Notebook:
+class StreamlitBook:
 
     def __init__(self, path):
         with open(path, 'rb') as file:
@@ -38,11 +38,11 @@ class Notebook:
         raise AttributeError("Cannot delete metadata attribute...")
 
     def __repr__(self):
-        custom_repr = f"Streamlitbook with {self.n_cells} cells."
+        custom_repr = f"StreamlitBook with {self.n_cells} cells."
         return custom_repr
 
     def __str__(self):
-        custom_str = f"Streamlitbook with {self.n_cells} cells."
+        custom_str = f"StreamlitBook with {self.n_cells} cells."
         return custom_str
 
 
