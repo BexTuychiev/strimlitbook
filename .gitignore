@@ -1,3 +1,6 @@
 .idea
 mytest.py
 mytest.ipynb
+build
+dist
+streamlitbook.egg-info
