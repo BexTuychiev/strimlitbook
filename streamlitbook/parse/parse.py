@@ -11,7 +11,7 @@ class Notebook:
             data_dict = json.load(file)
         self._cells = [Code(cell) if cell['type'] == 'code' else Markdown(cell) for cell in data_dict['cells']]
         self._n_cells = len(self._cells)
-        self.metadata = data_dict['metadata']
+        self._metadata = data_dict['metadata']
 
     @property
     def cells(self):
@@ -28,6 +28,14 @@ class Notebook:
     @n_cells.deleter
     def n_cells(self):
         raise AttributeError("Cannot delete n_cells attribute...")
+
+    @property
+    def metadata(self):
+        return self._metadata
+
+    @metadata.deleter
+    def metadata(self):
+        raise AttributeError("Cannot delete metadata attribute...")
 
 
 class Cell:
