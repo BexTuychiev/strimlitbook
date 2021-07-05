@@ -45,6 +45,14 @@ class Cell:
     def source(self):
         raise AttributeError("Cannot delete source attribute...")
 
+    def __repr__(self):
+        custom_repr = f"Jupyter Cell with type {self._type}"
+        return custom_repr
+
+    def __str__(self):
+        custom_str = f"Jupyter Cell with type {self._type}"
+        return custom_str
+
 
 class Code(Cell):
     pass
