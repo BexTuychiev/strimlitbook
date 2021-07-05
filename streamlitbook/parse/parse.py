@@ -43,7 +43,7 @@ class Cell:
 
     @source.deleter
     def source(self):
-        raise AttributeError("Cannot delete source attribute")
+        raise AttributeError("Cannot delete source attribute...")
 
 
 class Code(Cell):
