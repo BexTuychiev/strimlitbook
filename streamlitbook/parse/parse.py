@@ -108,3 +108,9 @@ class Code(Cell):
 
     def display(self):
         st.code(self.source)
+
+        if len(self._output) == 0:
+            pass
+        else:
+            if "text/html" in self._output[0]['data'].keys():
+                Code._display_dataframe(self._output[0]['data']['text/html'])
