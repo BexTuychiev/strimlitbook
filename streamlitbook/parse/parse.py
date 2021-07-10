@@ -91,7 +91,7 @@ class Cell:
 class Markdown(Cell):
 
     def display(self):
-        st.markdown(self.source)
+        st.markdown(self.source, unsafe_allow_html=True)
 
 
 class Code(Cell):
