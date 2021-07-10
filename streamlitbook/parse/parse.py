@@ -94,4 +94,7 @@ class Markdown(Cell):
 
 
 class Code(Cell):
-    pass
+
+    def __init__(self, cell_dict: dict):
+        super().__init__(cell_dict)
+        self._output = cell_dict['outputs']
