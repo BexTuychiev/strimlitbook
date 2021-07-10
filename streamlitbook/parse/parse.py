@@ -2,6 +2,7 @@
 A module that contains classes to deal with Jupyter Notebooks
 """
 import json
+import streamlit as st
 
 
 class StreamlitBook:
@@ -86,9 +87,11 @@ class Cell:
         return custom_str
 
 
-class Code(Cell):
-    pass
-
-
 class Markdown(Cell):
+
+    def display(self):
+        st.markdown(self.source)
+
+
+class Code(Cell):
     pass
