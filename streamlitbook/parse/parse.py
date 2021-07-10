@@ -9,7 +9,7 @@ class StreamlitBook:
     def __init__(self, path):
         with open(path, 'rb') as file:
             data_dict = json.load(file)
-        self._cells = [Code(cell) if cell['type'] == 'code' else Markdown(cell) for cell in data_dict['cells']]
+        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in data_dict['cells']]
         self._n_cells = len(self._cells)
         self._metadata = data_dict['metadata']
 
