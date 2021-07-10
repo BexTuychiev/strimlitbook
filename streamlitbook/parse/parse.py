@@ -3,6 +3,7 @@ A module that contains classes to deal with Jupyter Notebooks
 """
 import json
 import streamlit as st
+from bs4 import BeautifulSoup
 
 
 class StreamlitBook:
@@ -98,6 +99,12 @@ class Code(Cell):
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
         self._output = cell_dict['outputs']
+
+    @staticmethod
+    def _display_dataframe(html_df: list):
+        soup = BeautifulSoup("".join(html_df))
+        soup.style.clear()
+        st.markdown(str(soup), unsafe_allow_html=True)
 
     def display(self):
         st.code(self.source)
