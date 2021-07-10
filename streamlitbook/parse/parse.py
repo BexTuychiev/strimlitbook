@@ -51,7 +51,7 @@ class Cell:
     def __init__(self, cell_dict: dict):
         self._type = cell_dict['cell_type']
         self._metadata = cell_dict['metadata']
-        self._source = Cell._compile_code(cell_dict['source'])
+        self._source = "".join(cell_dict['source'])
 
     @property
     def type(self):
@@ -84,11 +84,6 @@ class Cell:
     def __str__(self):
         custom_str = f"Jupyter Cell with type {self._type}"
         return custom_str
-
-    @staticmethod
-    def _compile_code(source):
-        source = "".join(source)
-        return source
 
 
 class Code(Cell):
