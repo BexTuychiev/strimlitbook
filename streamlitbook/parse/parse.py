@@ -98,3 +98,6 @@ class Code(Cell):
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
         self._output = cell_dict['outputs']
+
+    def display(self):
+        st.code(self.source)
