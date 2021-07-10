@@ -4,6 +4,8 @@ A module that contains classes to deal with Jupyter Notebooks
 import json
 import streamlit as st
 from bs4 import BeautifulSoup
+import PIL
+import io
 
 
 class StreamlitBook:
@@ -113,5 +115,13 @@ class Code(Cell):
         if not self.has_output:
             pass
         else:
-            if "text/html" in self._output[0]['data'].keys():
-                Code._display_dataframe(self._output[0]['data']['text/html'])
+            # Store the output to a variable for ease of use
+            output = self._output[0]['data']
+
+            if "text/html" in output.keys():
+                Code._display_dataframe(output['text/html'])
+                del output['text/plain']
+                st.write("\n")
+            elif "image/png" in output.keys():
+                del output['image/png']
+                pass
