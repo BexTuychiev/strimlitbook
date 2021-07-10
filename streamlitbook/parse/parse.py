@@ -125,3 +125,5 @@ class Code(Cell):
             elif "image/png" in output.keys():
                 del output['image/png']
                 pass
+            elif "text/plain" in output.keys():
+                st.code("".join(output['text/plain']))
