@@ -103,8 +103,8 @@ class Code(Cell):
         self._raw_data = cell_dict
 
     @staticmethod
-    def _display_dataframe(html_df: list):
-        df = pd.read_html("".join(html_df))[0]
+    def _display_dataframe(html_df: str):
+        df = pd.read_html(html_df)[0]
         df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
         st.dataframe(df.set_index(df.columns[0]))
 
@@ -132,4 +132,10 @@ class Code(Cell):
         return outputs
 
     def display(self):
+        # if not self._outputs:
+        #     st.code(self._source)
+        #
+        # display_codes = {
+        #     'text/html': Cell._display_dataframe
+        # }
         pass
