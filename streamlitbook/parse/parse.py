@@ -137,4 +137,18 @@ class Code(Cell):
         st.image(bytes_image, use_column_width='always')
 
     def display(self):
-        pass
+        st.code(self.source)
+        if self._outputs is None:
+            return None
+
+        display_keys = {
+            "text/html": Code._display_dataframe,
+            "image/png": Code._display_image,
+            "text/plain": lambda x: st.code(x),
+            "stdout": lambda x: st.code(x),
+            "error": lambda x: st.error(x)
+        }
+
+        for output in self._outputs:
+            for key, value in output.items():
+                display_keys[key](value)
