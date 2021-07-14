@@ -4,8 +4,7 @@ A module that contains classes to deal with Jupyter Notebooks
 import json
 import streamlit as st
 from bs4 import BeautifulSoup
-import PIL
-import io
+import base64
 
 
 class StreamlitBook:
@@ -123,7 +122,8 @@ class Code(Cell):
                 del output['text/plain']
                 st.write("\n")
             elif "image/png" in output.keys():
+                image_binary = base64.decodebytes(str.encode(output['image/png']))
+                st.image(image_binary, use_column_width='always')
                 del output['image/png']
-                pass
             elif "text/plain" in output.keys():
                 st.code("".join(output['text/plain']))
