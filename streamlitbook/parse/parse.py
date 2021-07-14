@@ -102,12 +102,6 @@ class Code(Cell):
         super().__init__(cell_dict)
         self._raw_data = cell_dict
 
-    @staticmethod
-    def _display_dataframe(html_df: str):
-        df = pd.read_html(html_df)[0]
-        df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
-        st.dataframe(df.set_index(df.columns[0]))
-
     @property
     def _outputs(self):
         if len(self._raw_data['outputs']) == 0:
@@ -131,11 +125,16 @@ class Code(Cell):
 
         return outputs
 
+    @staticmethod
+    def _display_dataframe(html_df: str):
+        df = pd.read_html(html_df)[0]
+        df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
+        st.dataframe(df.set_index(df.columns[0]))
+
+    @staticmethod
+    def _display_image(image_string: str):
+        bytes_image = base64.decodebytes(str.encode(image_string))
+        st.image(bytes_image, use_column_width='always')
+
     def display(self):
-        # if not self._outputs:
-        #     st.code(self._source)
-        #
-        # display_codes = {
-        #     'text/html': Cell._display_dataframe
-        # }
         pass
