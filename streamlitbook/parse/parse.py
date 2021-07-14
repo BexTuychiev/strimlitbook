@@ -100,7 +100,7 @@ class Code(Cell):
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
         self._output = cell_dict['outputs']
-        self.has_output = True if len(self._output) != 0 else False
+        self._has_output = True if len(self._output) != 0 else False
 
     @staticmethod
     def _display_dataframe(html_df: list):
@@ -111,7 +111,7 @@ class Code(Cell):
     def display(self):
         st.code(self.source)
 
-        if not self.has_output:
+        if not self._has_output:
             pass
         else:
             # Store the output to a variable for ease of use
