@@ -2,6 +2,8 @@
 A module that contains classes to deal with Jupyter Notebooks
 """
 import json
+
+import pandas as pd
 import streamlit as st
 from bs4 import BeautifulSoup
 import base64
@@ -104,16 +106,14 @@ class Code(Cell):
 
     @staticmethod
     def _display_dataframe(html_df: list):
-        soup = BeautifulSoup("".join(html_df))
-        soup.style.clear()
-        st.markdown(str(soup), unsafe_allow_html=True)
+        df = pd.read_html("".join(html_df))[0]
+        df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
+        st.dataframe(df.set_index(df.columns[0]))
 
     def display(self):
         st.code(self.source)
 
-        if not self._has_output:
-            pass
-        else:
+        if self._has_output:
             # Store the output to a variable for ease of use
             output = self._output[0]['data']
 
