@@ -100,6 +100,7 @@ class Code(Cell):
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
+        self._raw_data = cell_dict
         self._output = cell_dict['outputs']
         self._has_output = True if len(self._output) != 0 else False
 
@@ -108,6 +109,8 @@ class Code(Cell):
         df = pd.read_html("".join(html_df))[0]
         df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
         st.dataframe(df.set_index(df.columns[0]))
+
+    # def _parse_output(self):
 
     def display(self):
         st.code(self.source)
