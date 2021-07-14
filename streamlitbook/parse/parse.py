@@ -101,8 +101,6 @@ class Code(Cell):
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
         self._raw_data = cell_dict
-        self._output = cell_dict['outputs']
-        self._has_output = True if len(self._output) != 0 else False
 
     @staticmethod
     def _display_dataframe(html_df: list):
