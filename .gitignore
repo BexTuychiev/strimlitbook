@@ -5,4 +5,4 @@ build
 dist
 streamlitbook.egg-info
 .ipynb_checkpoints
-*.ipynb
+test
