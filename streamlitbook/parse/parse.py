@@ -110,22 +110,28 @@ class Code(Cell):
         df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
         st.dataframe(df.set_index(df.columns[0]))
 
-    # def _parse_output(self):
+    @property
+    def _outputs(self):
+        if len(self._raw_data['outputs']) == 0:
+            return None
+
+        outputs = []
+        for output in self._raw_data['outputs']:
+            output_dict = {}
+            if output['output_type'] == 'stream':
+                output_dict['stdout'] = ''.join(output['text'])
+            elif output['output_type'] in ("display_data", "execute_result"):
+                if "text/html" in output['data'].keys():
+                    output_dict["text/html"] = ''.join(output['data']['text/html'])
+                elif "image/png" in output['data'].keys():
+                    output_dict['image/png'] = output['data']['image/png'].strip()
+                elif "text/plain" in output['data'].keys():
+                    output_dict['text/plain'] = ''.join(output['data']['text/plain'])
+            elif output['output_type'] == 'error':
+                output_dict['error'] = output['ename']
+            outputs.append(output_dict)
+
+        return outputs
 
     def display(self):
-        st.code(self.source)
-
-        if self._has_output:
-            # Store the output to a variable for ease of use
-            output = self._output[0]['data']
-
-            if "text/html" in output.keys():
-                Code._display_dataframe(output['text/html'])
-                del output['text/plain']
-                st.write("\n")
-            elif "image/png" in output.keys():
-                image_binary = base64.decodebytes(str.encode(output['image/png']))
-                st.image(image_binary, use_column_width='always')
-                del output['image/png']
-            elif "text/plain" in output.keys():
-                st.code("".join(output['text/plain']))
+        pass
