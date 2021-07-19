@@ -157,7 +157,8 @@ class Code(Cell):
             st.plotly_chart(fig)
 
     def display(self):
-        st.code(self.source)
+        if len(self.source) > 0:
+            st.code(self.source)
         if self._outputs is None:
             return None
 
