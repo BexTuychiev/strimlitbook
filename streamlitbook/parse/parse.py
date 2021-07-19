@@ -6,6 +6,7 @@ import json
 import pandas as pd
 import streamlit as st
 import base64
+import plotly.graph_objects as go
 
 
 class StreamlitBook:
@@ -110,10 +111,16 @@ class Code(Cell):
         outputs = []
         for output in self._raw_data['outputs']:
             output_dict = {}
+
             if output['output_type'] == 'stream':
                 output_dict['stdout'] = ''.join(output['text'])
             elif output['output_type'] in ("display_data", "execute_result"):
-                if "text/html" in output['data'].keys():
+                if "application/vnd.plotly.v1+json" in output['data'].keys():
+                    output_dict["plotly_fig"] = {"data": output['data']['application/vnd.plotly.v1+json']['data'],
+                                                 "layout": output['data']['application/vnd.plotly.v1+json']['layout']}
+                elif "text/html" in output['data'].keys():
+                    if "Plotly" in ''.join(output['data']['text/html']):
+                        continue
                     output_dict["text/html"] = ''.join(output['data']['text/html'])
                 elif "image/png" in output['data'].keys():
                     output_dict['image/png'] = output['data']['image/png'].strip()
@@ -136,12 +143,18 @@ class Code(Cell):
         bytes_image = base64.decodebytes(str.encode(image_string))
         st.image(bytes_image, use_column_width='always')
 
+    @staticmethod
+    def _display_plotly(fig_dict: dict):
+        fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
+        st.plotly_chart(fig)
+
     def display(self):
         st.code(self.source)
         if self._outputs is None:
             return None
 
         display_keys = {
+            "plotly_fig": Code._display_plotly,
             "text/html": Code._display_dataframe,
             "image/png": Code._display_image,
             "text/plain": lambda x: st.code(x),
