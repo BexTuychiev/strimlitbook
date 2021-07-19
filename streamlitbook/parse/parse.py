@@ -116,8 +116,13 @@ class Code(Cell):
                 output_dict['stdout'] = ''.join(output['text'])
             elif output['output_type'] in ("display_data", "execute_result"):
                 if "application/vnd.plotly.v1+json" in output['data'].keys():
-                    output_dict["plotly_fig"] = {"data": output['data']['application/vnd.plotly.v1+json']['data'],
-                                                 "layout": output['data']['application/vnd.plotly.v1+json']['layout']}
+                    plotly_data_dict = output['data']['application/vnd.plotly.v1+json']['data']
+                    plotly_layout_dict = output['data']['application/vnd.plotly.v1+json']['layout']
+                    if "config" in output['data']['application/vnd.plotly.v1+json'].keys():
+                        plotly_config_dict = output['data']['application/vnd.plotly.v1+json']['config']
+                    output_dict["plotly_fig"] = {"data": plotly_data_dict,
+                                                 "layout": plotly_layout_dict,
+                                                 "config": plotly_config_dict}
                 elif "text/html" in output['data'].keys():
                     if "Plotly" in ''.join(output['data']['text/html']):
                         continue
@@ -146,7 +151,10 @@ class Code(Cell):
     @staticmethod
     def _display_plotly(fig_dict: dict):
         fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
-        st.plotly_chart(fig)
+        if "config" in fig_dict.keys():
+            st.plotly_chart(fig, config=fig_dict['config'])
+        else:
+            st.plotly_chart(fig)
 
     def display(self):
         st.code(self.source)
