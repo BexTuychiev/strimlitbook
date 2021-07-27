@@ -103,15 +103,27 @@ class Markdown(Cell):
     def _attachments(self):
         attach_list = list()
         if self._raw_attachments:
-            for key, attachment in self._raw_attachments.items():
-                for attach_name, value in attachment.items():
+            for _, attachment in self._raw_attachments.items():
+                for _, value in attachment.items():
                     attach_list.append(value)
         return attach_list
+
+    @staticmethod
+    def _display_image(image_string: str):
+        bytes_image = base64.decodebytes(str.encode(image_string))
+        st.image(bytes_image, use_column_width='always')
 
     def display(self):
         if self._attachments:
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
-        st.markdown(self.source, unsafe_allow_html=True)
+            for index, source in enumerate(splitted_source):
+                st.markdown(source)
+                try:
+                    Markdown._display_image(self._attachments[index])
+                except IndexError:
+                    pass
+        else:
+            st.markdown(self.source, unsafe_allow_html=True)
 
 
 class Code(Cell):
