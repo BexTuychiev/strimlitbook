@@ -92,6 +92,11 @@ class Cell:
         custom_str = f"Jupyter Cell with type {self._type}"
         return custom_str
 
+    @staticmethod
+    def _display_image(image_string: str):
+        bytes_image = base64.decodebytes(str.encode(image_string))
+        st.image(bytes_image, use_column_width='always')
+
 
 class Markdown(Cell):
 
@@ -107,11 +112,6 @@ class Markdown(Cell):
                 for _, value in attachment.items():
                     attach_list.append(value)
         return attach_list
-
-    @staticmethod
-    def _display_image(image_string: str):
-        bytes_image = base64.decodebytes(str.encode(image_string))
-        st.image(bytes_image, use_column_width='always')
 
     def display(self):
         if self._attachments:
@@ -171,11 +171,6 @@ class Code(Cell):
         df = pd.read_html(html_df)[0]
         df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
         st.dataframe(df.set_index(df.columns[0]))
-
-    @staticmethod
-    def _display_image(image_string: str):
-        bytes_image = base64.decodebytes(str.encode(image_string))
-        st.image(bytes_image, use_column_width='always')
 
     @staticmethod
     def _display_plotly(fig_dict: dict):
