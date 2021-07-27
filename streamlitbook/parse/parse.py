@@ -93,6 +93,10 @@ class Cell:
 
 class Markdown(Cell):
 
+    def __init__(self, cell_dict: dict):
+        super().__init__(cell_dict)
+        self._attachments = cell_dict['attachments']
+
     def display(self):
         st.markdown(self.source, unsafe_allow_html=True)
 
