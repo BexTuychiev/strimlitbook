@@ -2,10 +2,11 @@
 A module that contains classes to deal with Jupyter Notebooks
 """
 import json
+import base64
+import re
 
 import pandas as pd
 import streamlit as st
-import base64
 import plotly.graph_objects as go
 
 
@@ -95,7 +96,7 @@ class Markdown(Cell):
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
-        self._attachments = cell_dict['attachments']
+        self._attachments = cell_dict.get('attachments', None)
 
     def display(self):
         st.markdown(self.source, unsafe_allow_html=True)
