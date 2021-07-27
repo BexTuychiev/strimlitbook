@@ -4,6 +4,7 @@ A module that contains classes to deal with Jupyter Notebooks
 import json
 import base64
 import re
+from collections import OrderedDict
 
 import pandas as pd
 import streamlit as st
@@ -96,9 +97,20 @@ class Markdown(Cell):
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
-        self._attachments = cell_dict.get('attachments', None)
+        self._raw_attachments = cell_dict.get('attachments', None)
+
+    @property
+    def _attachments(self):
+        attach_list = list()
+        if self._raw_attachments:
+            for key, attachment in self._raw_attachments.items():
+                for attach_name, value in attachment.items():
+                    attach_list.append(value)
+        return attach_list
 
     def display(self):
+        if self._attachments:
+            splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
         st.markdown(self.source, unsafe_allow_html=True)
 
 
