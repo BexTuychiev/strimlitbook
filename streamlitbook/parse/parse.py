@@ -59,7 +59,7 @@ class Cell:
         self._type = cell_dict['cell_type']
         self._metadata = cell_dict['metadata']
         self._source = "".join(cell_dict['source'])
-        self._tags = self._metadata.get("tags", None)
+        self._tags = self._metadata.get("tags", [])
 
     @property
     def type(self):
