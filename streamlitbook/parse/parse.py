@@ -127,7 +127,14 @@ class Markdown(Cell):
             st.markdown(self.source, unsafe_allow_html=True)
 
     def display(self):
-        self._display_parsing_attachments()
+        if self._tags:
+            if 'skip' in self._tags:
+                return None
+            elif 'ci' in self._tags:
+                with st.expander("See collapsed cell"):
+                    self._display_parsing_attachments()
+        else:
+            self._display_parsing_attachments()
 
 
 class Code(Cell):
