@@ -166,7 +166,7 @@ class Code(Cell):
                 elif self._tags:
                     if "altair" in self._tags:
                         alt_spec = output['data']['text/plain']
-                        output_dict['altair'] = alt_spec
+                        output_dict['altair_fig'] = alt_spec
                 elif "text/html" in output['data'].keys():
                     if "Plotly" in ''.join(
                             output['data']['text/html']):  # TODO add a better condition to check for Plotly HTML
@@ -196,6 +196,10 @@ class Code(Cell):
         else:
             st.plotly_chart(fig)
 
+    @staticmethod
+    def _display_vega_lite(vega_lite_spec: dict):
+        st.vega_lite_chart(spec=vega_lite_spec)
+
     def _display_source(self):
         if len(self.source) > 0:
             st.code(self.source)
@@ -206,6 +210,7 @@ class Code(Cell):
 
         display_keys = {
             "plotly_fig": Code._display_plotly,
+            "altair_fig": Code._display_vega_lite,
             "text/html": Code._display_dataframe,
             "image/png": Code._display_image,
             "text/plain": lambda x: st.code(x),
