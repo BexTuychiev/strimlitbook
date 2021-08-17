@@ -191,9 +191,12 @@ class Code(Cell):
         else:
             st.plotly_chart(fig)
 
-    def display(self):
+    def _display_source(self):
         if len(self.source) > 0:
             st.code(self.source)
+
+    def display(self):
+        self._display_source()
         if self._outputs is None:
             return None
 
