@@ -163,8 +163,13 @@ class Code(Cell):
                     output_dict["plotly_fig"] = {"data": plotly_data_dict,
                                                  "layout": plotly_layout_dict,
                                                  "config": plotly_config_dict}
+                elif self._tags:
+                    if "altair" in self._tags:
+                        alt_spec = output['data']['text/plain']
+                        output_dict['altair'] = alt_spec
                 elif "text/html" in output['data'].keys():
-                    if "Plotly" in ''.join(output['data']['text/html']):
+                    if "Plotly" in ''.join(
+                            output['data']['text/html']):  # TODO add a better condition to check for Plotly HTML
                         continue
                     output_dict["text/html"] = ''.join(output['data']['text/html'])
                 elif "image/png" in output['data'].keys():
