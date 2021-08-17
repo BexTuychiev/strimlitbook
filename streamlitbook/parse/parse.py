@@ -195,8 +195,7 @@ class Code(Cell):
         if len(self.source) > 0:
             st.code(self.source)
 
-    def display(self):
-        self._display_source()
+    def _display_outputs(self):
         if self._outputs is None:
             return None
 
@@ -212,3 +211,7 @@ class Code(Cell):
         for output in self._outputs:
             for key, value in output.items():
                 display_keys[key](value)
+
+    def display(self):
+        self._display_source()
+        self._display_outputs()
