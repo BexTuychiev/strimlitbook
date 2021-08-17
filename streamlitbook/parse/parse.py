@@ -114,7 +114,7 @@ class Markdown(Cell):
                     attach_list.append(value)
         return attach_list
 
-    def display(self):
+    def _display_parsing_attachments(self):
         if self._attachments:
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
             for index, source in enumerate(splitted_source):
@@ -125,6 +125,9 @@ class Markdown(Cell):
                     pass
         else:
             st.markdown(self.source, unsafe_allow_html=True)
+
+    def display(self):
+        self._display_parsing_attachments()
 
 
 class Code(Cell):
