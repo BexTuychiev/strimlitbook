@@ -205,7 +205,7 @@ class Code(Cell):
             "image/png": Code._display_image,
             "text/plain": lambda x: st.code(x),
             "stdout": lambda x: st.code(x),
-            "error": lambda x: st.error(x)
+            "error": lambda x: st.error(x)  # TODO check if error messages work
         }
 
         for output in self._outputs:
@@ -213,5 +213,21 @@ class Code(Cell):
                 display_keys[key](value)
 
     def display(self):
-        self._display_source()
-        self._display_outputs()
+        if self._tags:
+            if 'skip' in self._tags:
+                return None
+            elif 'hi' in self._tags or 'hide_input' in self._tags:
+                self._display_outputs()
+            elif 'ho' in self._tags or 'hide_output' in self._tags:
+                self._display_source()
+            elif 'ci' in self._tags or 'collapsed_input' in self._tags:
+                with st.expander("See hidden source code..."):
+                    self._display_source()
+                self._display_outputs()
+            elif 'co' in self._tags or 'collapsed_output' in self._tags:
+                self._display_source()
+                with st.expander("See hidden output..."):
+                    self._display_outputs()
+        else:
+            self._display_source()
+            self._display_outputs()
