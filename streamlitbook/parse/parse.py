@@ -52,6 +52,10 @@ class StreamlitBook:
         custom_str = f"StreamlitBook with {self.n_cells} cells."
         return custom_str
 
+    def display(self):
+        for cell in self.cells:
+            cell.display()
+
 
 class Cell:
 
