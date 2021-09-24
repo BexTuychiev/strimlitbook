@@ -12,6 +12,7 @@ import plotly.graph_objects as go
 
 
 class StreamlitBook:
+    """ """
 
     def __init__(self, path):
         with open(path, 'rb') as file:
@@ -22,26 +23,32 @@ class StreamlitBook:
 
     @property
     def cells(self):
+        """ """
         return self._cells
 
     @cells.deleter
     def cells(self):
+        """ """
         raise AttributeError("Cannot delete cells attribute...")
 
     @property
     def n_cells(self):
+        """ """
         return self._n_cells
 
     @n_cells.deleter
     def n_cells(self):
+        """ """
         raise AttributeError("Cannot delete n_cells attribute...")
 
     @property
     def metadata(self):
+        """ """
         return self._metadata
 
     @metadata.deleter
     def metadata(self):
+        """ """
         raise AttributeError("Cannot delete metadata attribute...")
 
     def __repr__(self):
@@ -53,11 +60,13 @@ class StreamlitBook:
         return custom_str
 
     def display(self):
+        """ """
         for cell in self.cells:
             cell.display()
 
 
 class Cell:
+    """ """
 
     def __init__(self, cell_dict: dict):
         self._type = cell_dict['cell_type']
@@ -67,26 +76,32 @@ class Cell:
 
     @property
     def type(self):
+        """ """
         return self._type
 
     @type.deleter
     def type(self):
+        """ """
         raise AttributeError("Cannot delete type attribute...")
 
     @property
     def metadata(self):
+        """ """
         return self._metadata
 
     @metadata.deleter
     def metadata(self):
+        """ """
         raise AttributeError("Cannot delete metadata attribute...")
 
     @property
     def source(self):
+        """ """
         return self._source
 
     @source.deleter
     def source(self):
+        """ """
         raise AttributeError("Cannot delete source attribute...")
 
     def __repr__(self):
@@ -99,11 +114,23 @@ class Cell:
 
     @staticmethod
     def _display_image(image_string: str):
+        """
+
+        Parameters
+        ----------
+        image_string: str :
+            
+
+        Returns
+        -------
+
+        """
         bytes_image = base64.decodebytes(str.encode(image_string))
         st.image(bytes_image, use_column_width='always')
 
 
 class Markdown(Cell):
+    """ """
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
@@ -111,6 +138,7 @@ class Markdown(Cell):
 
     @property
     def _attachments(self):
+        """ """
         attach_list = list()
         if self._raw_attachments:
             for _, attachment in self._raw_attachments.items():
@@ -119,6 +147,7 @@ class Markdown(Cell):
         return attach_list
 
     def _display_parsing_attachments(self):
+        """ """
         if self._attachments:
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
             for index, source in enumerate(splitted_source):
@@ -131,6 +160,7 @@ class Markdown(Cell):
             st.markdown(self.source, unsafe_allow_html=True)
 
     def display(self):
+        """ """
         if 'skip' in self._tags:
             return None
         elif 'ci' in self._tags:
@@ -141,6 +171,7 @@ class Markdown(Cell):
 
 
 class Code(Cell):
+    """ """
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
@@ -148,6 +179,7 @@ class Code(Cell):
 
     @property
     def _outputs(self):
+        """ """
         if len(self._raw_data['outputs']) == 0:
             return None
 
@@ -186,12 +218,34 @@ class Code(Cell):
 
     @staticmethod
     def _display_dataframe(html_df: str):
+        """
+
+        Parameters
+        ----------
+        html_df: str :
+            
+
+        Returns
+        -------
+
+        """
         df = pd.read_html(html_df)[0]
         df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
         st.dataframe(df.set_index(df.columns[0]))
 
     @staticmethod
     def _display_plotly(fig_dict: dict):
+        """
+
+        Parameters
+        ----------
+        fig_dict: dict :
+            
+
+        Returns
+        -------
+
+        """
         fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
         if "config" in fig_dict.keys():
             st.plotly_chart(fig, config=fig_dict['config'])
@@ -200,13 +254,26 @@ class Code(Cell):
 
     @staticmethod
     def _display_vega_lite(vega_lite_spec: dict):
+        """
+
+        Parameters
+        ----------
+        vega_lite_spec: dict :
+            
+
+        Returns
+        -------
+
+        """
         st.vega_lite_chart(spec=vega_lite_spec)
 
     def _display_source(self):
+        """ """
         if len(self.source) > 0:
             st.code(self.source)
 
     def _display_outputs(self):
+        """ """
         if self._outputs is None:
             return None
 
@@ -225,6 +292,7 @@ class Code(Cell):
                 display_keys[key](value)
 
     def display(self):
+        """ """
         if 'skip' in self._tags:
             return None
         elif 'hi' in self._tags or 'hide_input' in self._tags:
