@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 
 
 class StreamlitBook:
-    """ """
+    """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
 
     def __init__(self, path):
         with open(path, 'rb') as file:
@@ -23,32 +23,26 @@ class StreamlitBook:
 
     @property
     def cells(self):
-        """ """
         return self._cells
 
     @cells.deleter
     def cells(self):
-        """ """
         raise AttributeError("Cannot delete cells attribute...")
 
     @property
     def n_cells(self):
-        """ """
         return self._n_cells
 
     @n_cells.deleter
     def n_cells(self):
-        """ """
         raise AttributeError("Cannot delete n_cells attribute...")
 
     @property
     def metadata(self):
-        """ """
         return self._metadata
 
     @metadata.deleter
     def metadata(self):
-        """ """
         raise AttributeError("Cannot delete metadata attribute...")
 
     def __repr__(self):
@@ -60,7 +54,7 @@ class StreamlitBook:
         return custom_str
 
     def display(self):
-        """ """
+        """High-level function to display each cell as Streamlit component with outputs."""
         for cell in self.cells:
             cell.display()
 
