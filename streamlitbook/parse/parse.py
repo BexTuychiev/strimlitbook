@@ -134,11 +134,16 @@ class Markdown(Cell):
         return attach_list
 
     def _display_parsing_attachments(self):
-        """"""
+        """
+        Lower-level display method of markdown cells that parses attachments (if any)
+        and display in proper media format with streamlit.
+        """
+
         if self._attachments:
+            # Split the raw Markdown code at every line that has attachments
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
             for index, source in enumerate(splitted_source):
-                st.markdown(source)  # TODO check if HTML works inside cells with attachments
+                st.markdown(source)
                 try:
                     Markdown._display_image(self._attachments[index])
                 except IndexError:
