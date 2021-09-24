@@ -310,7 +310,8 @@ class Code(Cell):
                 display_keys[key](value)
 
     def display(self):
-        """ """
+        """High-level display function to combine cell source and outputs using tags."""
+
         if 'skip' in self._tags:
             return None
         elif 'hi' in self._tags or 'hide_input' in self._tags:
