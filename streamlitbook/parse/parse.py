@@ -116,15 +116,16 @@ class Cell:
 
 
 class Markdown(Cell):
-    """ """
+    """Extension of the generic Cell class to represent Markdown cells with more features."""
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
+        # Add an attribute for raw attachments
         self._raw_attachments = cell_dict.get('attachments', None)
 
     @property
     def _attachments(self):
-        """ """
+        """Parse cell attachments into an attribute"""
         attach_list = list()
         if self._raw_attachments:
             for _, attachment in self._raw_attachments.items():
@@ -133,11 +134,11 @@ class Markdown(Cell):
         return attach_list
 
     def _display_parsing_attachments(self):
-        """ """
+        """"""
         if self._attachments:
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
             for index, source in enumerate(splitted_source):
-                st.markdown(source)
+                st.markdown(source)  # TODO check if HTML works inside cells with attachments
                 try:
                     Markdown._display_image(self._attachments[index])
                 except IndexError:
