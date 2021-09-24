@@ -284,7 +284,7 @@ class Code(Cell):
         st.vega_lite_chart(spec=vega_lite_spec)
 
     def _display_source(self):
-        """ """
+        """Lower-level method to display cell code with Streamlit"""
         if len(self.source) > 0:
             st.code(self.source)
 
