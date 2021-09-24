@@ -221,6 +221,7 @@ class Code(Cell):
 
                 # image/png mimetype stores base64 encoded image outputs from plots, HTML, etc.
                 elif "image/png" in output['data'].keys():
+                    # TODO check if there are other mime types for different image extensions
                     output_dict['image/png'] = output['data']['image/png'].strip()
 
                 # Plain text from IPython cell execution, magic commands or print
