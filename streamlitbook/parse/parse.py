@@ -60,7 +60,7 @@ class StreamlitBook:
 
 
 class Cell:
-    """ """
+    """Generic cell class to make Jupyter Notebook cells streamlit-compatible"""
 
     def __init__(self, cell_dict: dict):
         self._type = cell_dict['cell_type']
@@ -70,32 +70,26 @@ class Cell:
 
     @property
     def type(self):
-        """ """
         return self._type
 
     @type.deleter
     def type(self):
-        """ """
         raise AttributeError("Cannot delete type attribute...")
 
     @property
     def metadata(self):
-        """ """
         return self._metadata
 
     @metadata.deleter
     def metadata(self):
-        """ """
         raise AttributeError("Cannot delete metadata attribute...")
 
     @property
     def source(self):
-        """ """
         return self._source
 
     @source.deleter
     def source(self):
-        """ """
         raise AttributeError("Cannot delete source attribute...")
 
     def __repr__(self):
@@ -109,14 +103,12 @@ class Cell:
     @staticmethod
     def _display_image(image_string: str):
         """
+        Convert base64 encoded images to bytes and display as streamlit media.
 
         Parameters
         ----------
         image_string: str :
-            
-
-        Returns
-        -------
+            base64 encoded string of an image.
 
         """
         bytes_image = base64.decodebytes(str.encode(image_string))
