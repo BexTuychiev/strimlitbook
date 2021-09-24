@@ -253,17 +253,17 @@ class Code(Cell):
     @staticmethod
     def _display_plotly(fig_dict: dict):
         """
+        Static, lower-level method to display Plotly figures from a figure
+        dictionaries parsed inside _outputs.
 
         Parameters
         ----------
         fig_dict: dict :
-            
-
-        Returns
-        -------
-
+            Plotly figure dictionary parsed from raw outputs inside _outputs.
         """
+
         fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
+
         if "config" in fig_dict.keys():
             st.plotly_chart(fig, config=fig_dict['config'])
         else:
