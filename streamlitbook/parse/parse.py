@@ -174,37 +174,60 @@ class Code(Cell):
 
     @property
     def _outputs(self):
-        """ """
+        """Parse outputs of a cell as an attribute for ease of access."""
+
+        # Check if there are any outputs
         if len(self._raw_data['outputs']) == 0:
             return None
 
+        # Empty list to store each output of a cell as a dictionary
         outputs = []
         for output in self._raw_data['outputs']:
             output_dict = {}
 
+            # if stream - then output is either from print function or for stdout
             if output['output_type'] == 'stream':
                 output_dict['stdout'] = ''.join(output['text'])
+
+            # if display_data or execute_result, there is output either as media or text
             elif output['output_type'] in ("display_data", "execute_result"):
+                # If the below key exists, the output is a Plotly chart
                 if "application/vnd.plotly.v1+json" in output['data'].keys():
                     plotly_data_dict = output['data']['application/vnd.plotly.v1+json']['data']
                     plotly_layout_dict = output['data']['application/vnd.plotly.v1+json']['layout']
+
+                    # If config key exists in Plotly output dict, user passed custom config to the chart
                     if "config" in output['data']['application/vnd.plotly.v1+json'].keys():
                         plotly_config_dict = output['data']['application/vnd.plotly.v1+json']['config']
+                    # Combine all parts for a Plotly output
                     output_dict["plotly_fig"] = {"data": plotly_data_dict,
                                                  "layout": plotly_layout_dict,
                                                  "config": plotly_config_dict}
+
+                # Altair chart rendering is only possible through the 'altair' tag on the cell
                 elif "altair" in self._tags:
+                    # Get the altair chart specs as a dictionary
                     alt_spec = ''.join(output['data']['text/plain'])
                     output_dict['altair_fig'] = eval(alt_spec)
+
+                # text/html mime type can mean many output types
                 elif "text/html" in output['data'].keys():
+                    # Check if it is not Plotly chart
                     if "Plotly" in ''.join(
                             output['data']['text/html']):  # TODO add a better condition to check for Plotly HTML
                         continue
+                    # Otherwise, store the raw HTML code
                     output_dict["text/html"] = ''.join(output['data']['text/html'])
+
+                # image/png mimetype stores base64 encoded image outputs from plots, HTML, etc.
                 elif "image/png" in output['data'].keys():
                     output_dict['image/png'] = output['data']['image/png'].strip()
+
+                # Plain text from IPython cell execution, magic commands or print
                 elif "text/plain" in output['data'].keys():
                     output_dict['text/plain'] = ''.join(output['data']['text/plain'])
+
+            # If the cell contains any outputs with errors
             elif output['output_type'] == 'error':
                 output_dict['error'] = output['ename']
             outputs.append(output_dict)
