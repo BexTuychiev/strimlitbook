@@ -166,7 +166,7 @@ class Markdown(Cell):
 
 
 class Code(Cell):
-    """ """
+    """Extension of the generic Cell class to represent code cells with more features."""
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
