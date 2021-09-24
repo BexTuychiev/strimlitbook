@@ -152,7 +152,10 @@ class Markdown(Cell):
             st.markdown(self.source, unsafe_allow_html=True)
 
     def display(self):
-        """ """
+        """
+        Higher-level function to display Markdown cells as streamlit components.
+        Display is performed based on tags.
+        """
         if 'skip' in self._tags:
             return None
         elif 'ci' in self._tags:
