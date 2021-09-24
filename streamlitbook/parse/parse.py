@@ -289,7 +289,8 @@ class Code(Cell):
             st.code(self.source)
 
     def _display_outputs(self):
-        """ """
+        """A lower-level function to map different _display_* functions to their specific outputs."""
+
         if self._outputs is None:
             return None
 
