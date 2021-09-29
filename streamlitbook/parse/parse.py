@@ -14,12 +14,9 @@ import plotly.graph_objects as go
 class StreamlitBook:
     """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
 
-    def __init__(self, path):
-        with open(path, 'rb') as file:
-            data_dict = json.load(file)
-        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in data_dict['cells']]
+    def __init__(self, jupyter_dict):
+        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in jupyter_dict['cells']]
         self._n_cells = len(self._cells)
-        self._metadata = data_dict['metadata']
 
     @property
     def cells(self):
@@ -35,15 +32,7 @@ class StreamlitBook:
 
     @n_cells.deleter
     def n_cells(self):
-        raise AttributeError("Cannot delete n_cells attribute...")
-
-    @property
-    def metadata(self):
-        return self._metadata
-
-    @metadata.deleter
-    def metadata(self):
-        raise AttributeError("Cannot delete metadata attribute...")
+        raise AttributeError("Cannot delete n_cells attribute...")  # TODO implement this attribute as an operator
 
     def __repr__(self):
         custom_repr = f"StreamlitBook with {self.n_cells} cells."

@@ -6,4 +6,5 @@ A complete package to parse and display Jupyter Notebook
 cells in Streamlit web app scripts. Identical conversion.
 """
 
-from . import parse
+from .parse import StreamlitBook
+from .reader import read_ipynb
