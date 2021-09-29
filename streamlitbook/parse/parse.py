@@ -14,10 +14,8 @@ import plotly.graph_objects as go
 class StreamlitBook:
     """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
 
-    def __init__(self, path):
-        with open(path, 'rb') as file:
-            data_dict = json.load(file)
-        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in data_dict['cells']]
+    def __init__(self, jupyter_dict):
+        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in jupyter_dict['cells']]
         self._n_cells = len(self._cells)
 
     @property
