@@ -35,7 +35,7 @@ class StreamlitBook:
 
     @n_cells.deleter
     def n_cells(self):
-        raise AttributeError("Cannot delete n_cells attribute...")
+        raise AttributeError("Cannot delete n_cells attribute...")  # TODO implement this attribute as an operator
 
     @property
     def metadata(self):
