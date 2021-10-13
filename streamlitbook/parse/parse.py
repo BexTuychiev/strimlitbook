@@ -48,6 +48,25 @@ class StreamlitBook:
         for cell in self.cells:
             cell.display()
 
+    def split(self, idx_to_split):
+        """
+        Split the book into two at the given index.
+
+        Parameters
+        ----------
+        idx_to_split: int:
+            Index of the cell to perform the split.
+            The second notebook will start from this index.
+
+        Returns
+        -------
+        A tuple of two StreamlitBook instances.
+        """
+        book1 = self._cell_dict[:idx_to_split]
+        book2 = self._cell_dict[idx_to_split:]
+
+        return self.__class__(book1), self.__class__(book2)
+
 
 class Cell:
     """Generic cell class to make Jupyter Notebook cells streamlit-compatible"""
