@@ -24,4 +24,4 @@ def read_ipynb(path: str) -> StreamlitBook:
     with open(path, "rb") as file:
         raw_dict = json.load(file)
 
-    return StreamlitBook(raw_dict)
+    return StreamlitBook(raw_dict['cells'])

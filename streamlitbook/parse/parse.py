@@ -14,8 +14,9 @@ import plotly.graph_objects as go
 class StreamlitBook:
     """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
 
-    def __init__(self, jupyter_dict):
-        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in jupyter_dict['cells']]
+    def __init__(self, cell_dicts):
+        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in cell_dicts]
+        self._cell_dict = cell_dicts
         self._n_cells = len(self._cells)
 
     @property
@@ -46,6 +47,25 @@ class StreamlitBook:
         """High-level function to display each cell as Streamlit component with outputs."""
         for cell in self.cells:
             cell.display()
+
+    def split(self, idx_to_split):
+        """
+        Split the book into two at the given index.
+
+        Parameters
+        ----------
+        idx_to_split: int:
+            Index of the cell to perform the split.
+            The second notebook will start from this index.
+
+        Returns
+        -------
+        A tuple of two StreamlitBook instances.
+        """
+        book1 = self._cell_dict[:idx_to_split]
+        book2 = self._cell_dict[idx_to_split:]
+
+        return self.__class__(book1), self.__class__(book2)
 
 
 class Cell:
