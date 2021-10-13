@@ -16,6 +16,7 @@ class StreamlitBook:
 
     def __init__(self, jupyter_dict):
         self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in jupyter_dict['cells']]
+        self._cell_dict = jupyter_dict
         self._n_cells = len(self._cells)
 
     @property
