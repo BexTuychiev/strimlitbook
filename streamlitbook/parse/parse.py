@@ -344,7 +344,7 @@ class Code(Cell):
             "image/png": Code._display_image,
             "text/plain": lambda x: st.code(x),
             "stdout": lambda x: st.code(x),
-            "error": lambda x: st.error(x)  # TODO check if error messages work
+            "error": lambda x: st.error(x)
         }
 
         for output in self._outputs:
