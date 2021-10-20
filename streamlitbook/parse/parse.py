@@ -150,11 +150,11 @@ class Cell:
             base64 encoded string of an image.
 
         """
-        # bytes_image = base64.decodebytes(str.encode(image_string))
-        # pil_image_white = Code._create_white_bg(image_string)
-        # pil_image_colored = Image.open(io.BytesIO(bytes_image))
-        # pil_image_white.paste(pil_image_colored, (0, 0))
-        # st.image(pil_image_white, use_column_width='always')
+        bytes_image = base64.decodebytes(str.encode(image_string))
+        pil_image_white = Code._create_white_bg(image_string)
+        pil_image_colored = Image.open(io.BytesIO(bytes_image))
+        pil_image_white.paste(pil_image_colored, (0, 0))
+        st.image(pil_image_white, use_column_width='always')
 
 
 class Markdown(Cell):
