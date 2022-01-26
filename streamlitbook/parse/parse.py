@@ -7,9 +7,9 @@ from PIL import Image
 import io
 
 import pandas as pd
-import numpy as np
 import streamlit as st
 import plotly.graph_objects as go
+from ..utils import _create_white_bg
 
 
 class StreamlitBook:
@@ -116,33 +116,6 @@ class Cell:
         return custom_str
 
     @staticmethod
-    def _create_white_bg(image_string: str):
-        """
-        Take a base64 encoded image, convert it to bytes and
-        create a white background image with the same shape as the image.
-
-        Parameters
-        ----------
-        image_string: str
-            base64 encoded string of an image
-
-        Returns
-        -------
-            White background image with the same shape as input image.
-        """
-        # Convert to bytes code from the image base64 string
-        bytes_image = base64.decodebytes(str.encode(image_string))
-
-        # Create a temporary image from the bytes
-        temp_image = Image.open(io.BytesIO(bytes_image))
-        width, height = temp_image.width, temp_image.height
-
-        white_image_array = 255 * np.ones((height, width, 3), np.uint8)
-        white_pil_image = Image.fromarray(white_image_array)
-
-        return white_pil_image
-
-    @staticmethod
     def _display_image(image_string: str):
         """
         Convert base64 encoded images to bytes and display as streamlit media.
@@ -154,7 +127,7 @@ class Cell:
 
         """
         bytes_image = base64.decodebytes(str.encode(image_string))
-        pil_image_white = Code._create_white_bg(image_string)
+        pil_image_white = _create_white_bg(image_string)
         pil_image_colored = Image.open(io.BytesIO(bytes_image))
         pil_image_white.paste(pil_image_colored, (0, 0))
         st.image(pil_image_white, use_column_width='always')
@@ -252,7 +225,7 @@ class Code(Cell):
                     if "config" in output['data'][
                         'application/vnd.plotly.v1+json'].keys():
                         plotly_config_dict = \
-                        output['data']['application/vnd.plotly.v1+json']['config']
+                            output['data']['application/vnd.plotly.v1+json']['config']
                     # Combine all parts for a Plotly output
                     output_dict["plotly_fig"] = {"data": plotly_data_dict,
                                                  "layout": plotly_layout_dict,
