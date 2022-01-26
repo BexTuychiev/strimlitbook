@@ -9,7 +9,7 @@ import io
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from ..utils import _create_white_bg
+from ..utilities import _create_white_bg
 
 
 class StreamlitBook:
