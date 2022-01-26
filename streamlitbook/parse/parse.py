@@ -1,10 +1,8 @@
 """
 A module that contains classes to deal with Jupyter Notebooks
 """
-import json
 import base64
 import re
-from collections import OrderedDict
 from PIL import Image
 import io
 
@@ -18,7 +16,8 @@ class StreamlitBook:
     """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
 
     def __init__(self, cell_dicts):
-        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for cell in cell_dicts]
+        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for
+                       cell in cell_dicts]
         self._cell_dict = cell_dicts
         self._n_cells = len(self._cells)
 
@@ -36,7 +35,8 @@ class StreamlitBook:
 
     @n_cells.deleter
     def n_cells(self):
-        raise AttributeError("Cannot delete n_cells attribute...")  # TODO implement this attribute as an operator
+        raise AttributeError(
+            "Cannot delete n_cells attribute...")
 
     def __repr__(self):
         custom_repr = f"StreamlitBook with {self.n_cells} cells."
@@ -47,7 +47,10 @@ class StreamlitBook:
         return custom_str
 
     def display(self):
-        """High-level function to display each cell as Streamlit component with outputs."""
+        """
+        High-level function to display each cell as a
+        Streamlit component with outputs.
+        """
         for cell in self.cells:
             cell.display()
 
@@ -158,7 +161,10 @@ class Cell:
 
 
 class Markdown(Cell):
-    """Extension of the generic Cell class to represent Markdown cells with more features."""
+    """
+    Extension of the generic Cell class
+    to represent Markdown cells with more features.
+    """
 
     def __init__(self, cell_dict: dict):
         super().__init__(cell_dict)
@@ -185,7 +191,8 @@ class Markdown(Cell):
             # Split the raw Markdown code at every line that has attachments
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
             for index, source in enumerate(splitted_source):
-                st.markdown(source)  # TODO check if HTML works inside cells with attachments
+                st.markdown(
+                    source)  # TODO check if HTML works inside cells with attachments
                 try:
                     Markdown._display_image(self._attachments[index])
                 except IndexError:
@@ -235,18 +242,24 @@ class Code(Cell):
             elif output['output_type'] in ("display_data", "execute_result"):
                 # If the below key exists, the output is a Plotly chart
                 if "application/vnd.plotly.v1+json" in output['data'].keys():
-                    plotly_data_dict = output['data']['application/vnd.plotly.v1+json']['data']
-                    plotly_layout_dict = output['data']['application/vnd.plotly.v1+json']['layout']
+                    plotly_data_dict = output['data']['application/vnd.plotly.v1+json'][
+                        'data']
+                    plotly_layout_dict = output['data']['application/vnd.plotly.v1+json'][
+                        'layout']
 
-                    # If config key exists in Plotly output dict, user passed custom config to the chart
-                    if "config" in output['data']['application/vnd.plotly.v1+json'].keys():
-                        plotly_config_dict = output['data']['application/vnd.plotly.v1+json']['config']
+                    # If config key exists in Plotly output dict,
+                    # user passed custom config to the chart
+                    if "config" in output['data'][
+                        'application/vnd.plotly.v1+json'].keys():
+                        plotly_config_dict = \
+                        output['data']['application/vnd.plotly.v1+json']['config']
                     # Combine all parts for a Plotly output
                     output_dict["plotly_fig"] = {"data": plotly_data_dict,
                                                  "layout": plotly_layout_dict,
                                                  "config": plotly_config_dict}
 
-                # Altair chart rendering is only possible through the 'altair' tag on the cell
+                # Altair chart rendering is only possible
+                # through the 'altair' tag on the cell
                 elif "altair" in self._tags:
                     # Get the altair chart specs as a dictionary
                     alt_spec = ''.join(output['data']['text/plain'])
@@ -256,12 +269,14 @@ class Code(Cell):
                 elif "text/html" in output['data'].keys():
                     # Check if it is not Plotly chart
                     if "Plotly" in ''.join(
-                            output['data']['text/html']):  # TODO add a better condition to check for Plotly HTML
+                            output['data'][
+                                'text/html']):  # TODO add a better condition to check for Plotly HTML
                         continue
                     # Otherwise, store the raw HTML code
                     output_dict["text/html"] = ''.join(output['data']['text/html'])
 
-                # image/png mimetype stores base64 encoded image outputs from plots, HTML, etc.
+                # image/png mimetype stores base64 encoded
+                # image outputs from plots, HTML, etc.
                 elif "image/png" in output['data'].keys():
                     # TODO check if there are other mime types for different image extensions
                     output_dict['image/png'] = output['data']['image/png'].strip()
@@ -332,7 +347,10 @@ class Code(Cell):
             st.code(self.source)
 
     def _display_outputs(self):
-        """A lower-level function to map different _display_* functions to their specific outputs."""
+        """
+        A lower-level function to map different
+        _display_* functions to their specific outputs.
+        """
 
         if self._outputs is None:
             return None
