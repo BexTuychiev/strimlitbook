@@ -9,7 +9,7 @@ import io
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from ..utilities import _create_white_bg
+from ..utilities import _display_image
 
 
 class StreamlitBook:
@@ -115,23 +115,6 @@ class Cell:
         custom_str = f"<StreamlitBook cell with type \"{self._type}\">"
         return custom_str
 
-    @staticmethod
-    def _display_image(image_string: str):
-        """
-        Convert base64 encoded images to bytes and display as streamlit media.
-
-        Parameters
-        ----------
-        image_string: str :
-            base64 encoded string of an image.
-
-        """
-        bytes_image = base64.decodebytes(str.encode(image_string))
-        pil_image_white = _create_white_bg(image_string)
-        pil_image_colored = Image.open(io.BytesIO(bytes_image))
-        pil_image_white.paste(pil_image_colored, (0, 0))
-        st.image(pil_image_white, use_column_width='always')
-
 
 class Markdown(Cell):
     """
@@ -167,7 +150,7 @@ class Markdown(Cell):
                 st.markdown(
                     source)  # TODO check if HTML works inside cells with attachments
                 try:
-                    Markdown._display_image(self._attachments[index])
+                    _display_image(self._attachments[index])
                 except IndexError:
                     pass
         else:
@@ -332,7 +315,7 @@ class Code(Cell):
             "plotly_fig": Code._display_plotly,
             "altair_fig": Code._display_vega_lite,
             "text/html": Code._display_dataframe,
-            "image/png": Code._display_image,
+            "image/png": _display_image,
             "text/plain": lambda x: st.code(x),
             "stdout": lambda x: st.code(x),
             "error": lambda x: st.error(x)

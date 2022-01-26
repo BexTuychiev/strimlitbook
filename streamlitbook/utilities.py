@@ -38,3 +38,27 @@ def _create_white_bg(image_string: str):
     white_pil_image = Image.fromarray(white_image_array)
 
     return white_pil_image
+
+
+def _display_image(image_string: str):
+    """
+    Convert base64 encoded images to bytes and display as streamlit media.
+
+    Parameters
+    ----------
+    image_string: str :
+        base64 encoded string of an image.
+
+    """
+    # Convert to bytes code from the image base64 string
+    bytes_image = base64.decodebytes(str.encode(image_string))
+
+    # Generate a white background image
+    pil_image_white = _create_white_bg(image_string)
+    # Convert the original bytes image to PIL image
+    pil_image_colored = Image.open(io.BytesIO(bytes_image))
+    # Paste the original bytes image on the white background image
+    pil_image_white.paste(pil_image_colored, (0, 0))
+
+    # Display the final image with streamlit
+    st.image(pil_image_white, use_column_width='always')
