@@ -39,11 +39,11 @@ class StreamlitBook:
             "Cannot delete n_cells attribute...")
 
     def __repr__(self):
-        custom_repr = f"StreamlitBook with {self.n_cells} cells."
+        custom_repr = f"StreamlitBook()"
         return custom_repr
 
     def __str__(self):
-        custom_str = f"StreamlitBook with {self.n_cells} cells."
+        custom_str = f"<StreamlitBook with {self.n_cells} cells>"
         return custom_str
 
     def display(self):
