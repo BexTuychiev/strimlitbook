@@ -9,7 +9,8 @@ import io
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from ..utilities import _display_image, _display_dataframe, _create_white_bg
+from ..utilities import _display_image, _display_dataframe, \
+    _display_plotly
 
 
 class StreamlitBook:
@@ -249,25 +250,6 @@ class Code(Cell):
         return outputs
 
     @staticmethod
-    def _display_plotly(fig_dict: dict):
-        """
-        Static, lower-level method to display Plotly figures from a figure
-        dictionaries parsed inside _outputs.
-
-        Parameters
-        ----------
-        fig_dict: dict :
-            Plotly figure dictionary parsed from raw outputs inside _outputs.
-        """
-
-        fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
-
-        if "config" in fig_dict.keys():
-            st.plotly_chart(fig, config=fig_dict['config'])
-        else:
-            st.plotly_chart(fig)
-
-    @staticmethod
     def _display_vega_lite(vega_lite_spec: dict):
         """
         Static, lower-level method to display Altair charts.
@@ -296,7 +278,7 @@ class Code(Cell):
             return None
 
         display_keys = {
-            "plotly_fig": Code._display_plotly,
+            "plotly_fig": _display_plotly,
             "altair_fig": Code._display_vega_lite,
             "text/html": _display_dataframe,
             "image/png": _display_image,

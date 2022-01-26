@@ -78,3 +78,22 @@ def _display_dataframe(html_df: str):
     df = pd.read_html(html_df)[0]
     df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
     st.dataframe(df.set_index(df.columns[0]))
+
+
+def _display_plotly(fig_dict: dict):
+    """
+    Static, lower-level method to display Plotly figures from a figure
+    dictionaries parsed inside _outputs.
+
+    Parameters
+    ----------
+    fig_dict: dict :
+        Plotly figure dictionary parsed from raw outputs inside _outputs.
+    """
+
+    fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
+
+    if "config" in fig_dict.keys():
+        st.plotly_chart(fig, config=fig_dict['config'])
+    else:
+        st.plotly_chart(fig)
