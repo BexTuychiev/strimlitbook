@@ -97,3 +97,17 @@ def _display_plotly(fig_dict: dict):
         st.plotly_chart(fig, config=fig_dict['config'])
     else:
         st.plotly_chart(fig)
+
+
+def _display_vega_lite(vega_lite_spec: dict):
+    """
+    Static, lower-level method to display Altair charts.
+
+    Parameters
+    ----------
+    vega_lite_spec: dict :
+        Altair chart dictionary spec parsed from raw outputs inside _outputs.
+
+    """
+
+    st.vega_lite_chart(spec=vega_lite_spec)

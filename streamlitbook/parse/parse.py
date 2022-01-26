@@ -10,7 +10,7 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 from ..utilities import _display_image, _display_dataframe, \
-    _display_plotly
+    _display_plotly, _display_vega_lite
 
 
 class StreamlitBook:
@@ -249,20 +249,6 @@ class Code(Cell):
 
         return outputs
 
-    @staticmethod
-    def _display_vega_lite(vega_lite_spec: dict):
-        """
-        Static, lower-level method to display Altair charts.
-
-        Parameters
-        ----------
-        vega_lite_spec: dict :
-            Altair chart dictionary spec parsed from raw outputs inside _outputs.
-
-        """
-
-        st.vega_lite_chart(spec=vega_lite_spec)
-
     def _display_source(self):
         """Lower-level method to display cell code with Streamlit"""
         if len(self.source) > 0:
@@ -279,7 +265,7 @@ class Code(Cell):
 
         display_keys = {
             "plotly_fig": _display_plotly,
-            "altair_fig": Code._display_vega_lite,
+            "altair_fig": _display_vega_lite,
             "text/html": _display_dataframe,
             "image/png": _display_image,
             "text/plain": lambda x: st.code(x),
