@@ -2,8 +2,6 @@
 A module that contains utility functions.
 """
 
-from . import StreamlitBook
-
 import base64
 import re
 from PIL import Image
