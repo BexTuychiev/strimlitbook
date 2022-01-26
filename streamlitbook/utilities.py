@@ -62,3 +62,19 @@ def _display_image(image_string: str):
 
     # Display the final image with streamlit
     st.image(pil_image_white, use_column_width='always')
+
+
+def _display_dataframe(html_df: str):
+    """
+    Static, lower-level method to retrieve a DataFrame from HTML code
+    that gets rendered under the hood of a Jupyter Cell.
+
+    Parameters
+    ----------
+    html_df: str :
+        Raw HTML code that contains <table> tag.
+    """
+
+    df = pd.read_html(html_df)[0]
+    df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
+    st.dataframe(df.set_index(df.columns[0]))

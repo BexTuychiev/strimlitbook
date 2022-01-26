@@ -9,7 +9,7 @@ import io
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from ..utilities import _display_image
+from ..utilities import _display_image, _display_dataframe, _create_white_bg
 
 
 class StreamlitBook:
@@ -249,22 +249,6 @@ class Code(Cell):
         return outputs
 
     @staticmethod
-    def _display_dataframe(html_df: str):
-        """
-        Static, lower-level method to retrieve a DataFrame from HTML code
-        that gets rendered under the hood of a Jupyter Cell.
-
-        Parameters
-        ----------
-        html_df: str :
-            Raw HTML code that contains <table> tag.
-        """
-
-        df = pd.read_html(html_df)[0]
-        df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
-        st.dataframe(df.set_index(df.columns[0]))
-
-    @staticmethod
     def _display_plotly(fig_dict: dict):
         """
         Static, lower-level method to display Plotly figures from a figure
@@ -314,7 +298,7 @@ class Code(Cell):
         display_keys = {
             "plotly_fig": Code._display_plotly,
             "altair_fig": Code._display_vega_lite,
-            "text/html": Code._display_dataframe,
+            "text/html": _display_dataframe,
             "image/png": _display_image,
             "text/plain": lambda x: st.code(x),
             "stdout": lambda x: st.code(x),
