@@ -108,11 +108,11 @@ class Cell:
         raise AttributeError("Cannot delete source attribute...")
 
     def __repr__(self):
-        custom_repr = f"<StreamlitBook cell with type {self._type}>"
+        custom_repr = f"<StreamlitBook cell with type \"{self._type}\">"
         return custom_repr
 
     def __str__(self):
-        custom_str = f"<StreamlitBook cell with type {self._type}>"
+        custom_str = f"<StreamlitBook cell with type \"{self._type}\">"
         return custom_str
 
     @staticmethod
