@@ -62,3 +62,52 @@ def _display_image(image_string: str):
 
     # Display the final image with streamlit
     st.image(pil_image_white, use_column_width='always')
+
+
+def _display_dataframe(html_df: str):
+    """
+    Static, lower-level method to retrieve a DataFrame from HTML code
+    that gets rendered under the hood of a Jupyter Cell.
+
+    Parameters
+    ----------
+    html_df: str :
+        Raw HTML code that contains <table> tag.
+    """
+
+    df = pd.read_html(html_df)[0]
+    df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
+    st.dataframe(df.set_index(df.columns[0]))
+
+
+def _display_plotly(fig_dict: dict):
+    """
+    Static, lower-level method to display Plotly figures from a figure
+    dictionaries parsed inside _outputs.
+
+    Parameters
+    ----------
+    fig_dict: dict :
+        Plotly figure dictionary parsed from raw outputs inside _outputs.
+    """
+
+    fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
+
+    if fig_dict['config'] is not None:
+        st.plotly_chart(fig, config=fig_dict['config'])
+    else:
+        st.plotly_chart(fig)
+
+
+def _display_vega_lite(vega_lite_spec: dict):
+    """
+    Static, lower-level method to display Altair charts.
+
+    Parameters
+    ----------
+    vega_lite_spec: dict :
+        Altair chart dictionary spec parsed from raw outputs inside _outputs.
+
+    """
+
+    st.vega_lite_chart(spec=vega_lite_spec)

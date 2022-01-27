@@ -9,7 +9,8 @@ import io
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from ..utilities import _display_image
+from ..utilities import _display_image, _display_dataframe, \
+    _display_plotly, _display_vega_lite
 
 
 class StreamlitBook:
@@ -209,6 +210,8 @@ class Code(Cell):
                         'application/vnd.plotly.v1+json'].keys():
                         plotly_config_dict = \
                             output['data']['application/vnd.plotly.v1+json']['config']
+                    else:
+                        plotly_config_dict = None
                     # Combine all parts for a Plotly output
                     output_dict["plotly_fig"] = {"data": plotly_data_dict,
                                                  "layout": plotly_layout_dict,
@@ -248,55 +251,6 @@ class Code(Cell):
 
         return outputs
 
-    @staticmethod
-    def _display_dataframe(html_df: str):
-        """
-        Static, lower-level method to retrieve a DataFrame from HTML code
-        that gets rendered under the hood of a Jupyter Cell.
-
-        Parameters
-        ----------
-        html_df: str :
-            Raw HTML code that contains <table> tag.
-        """
-
-        df = pd.read_html(html_df)[0]
-        df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
-        st.dataframe(df.set_index(df.columns[0]))
-
-    @staticmethod
-    def _display_plotly(fig_dict: dict):
-        """
-        Static, lower-level method to display Plotly figures from a figure
-        dictionaries parsed inside _outputs.
-
-        Parameters
-        ----------
-        fig_dict: dict :
-            Plotly figure dictionary parsed from raw outputs inside _outputs.
-        """
-
-        fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
-
-        if "config" in fig_dict.keys():
-            st.plotly_chart(fig, config=fig_dict['config'])
-        else:
-            st.plotly_chart(fig)
-
-    @staticmethod
-    def _display_vega_lite(vega_lite_spec: dict):
-        """
-        Static, lower-level method to display Altair charts.
-
-        Parameters
-        ----------
-        vega_lite_spec: dict :
-            Altair chart dictionary spec parsed from raw outputs inside _outputs.
-
-        """
-
-        st.vega_lite_chart(spec=vega_lite_spec)
-
     def _display_source(self):
         """Lower-level method to display cell code with Streamlit"""
         if len(self.source) > 0:
@@ -312,9 +266,9 @@ class Code(Cell):
             return None
 
         display_keys = {
-            "plotly_fig": Code._display_plotly,
-            "altair_fig": Code._display_vega_lite,
-            "text/html": Code._display_dataframe,
+            "plotly_fig": _display_plotly,
+            "altair_fig": _display_vega_lite,
+            "text/html": _display_dataframe,
             "image/png": _display_image,
             "text/plain": lambda x: st.code(x),
             "stdout": lambda x: st.code(x),
