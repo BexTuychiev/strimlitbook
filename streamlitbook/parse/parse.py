@@ -210,6 +210,8 @@ class Code(Cell):
                         'application/vnd.plotly.v1+json'].keys():
                         plotly_config_dict = \
                             output['data']['application/vnd.plotly.v1+json']['config']
+                    else:
+                        plotly_config_dict = None
                     # Combine all parts for a Plotly output
                     output_dict["plotly_fig"] = {"data": plotly_data_dict,
                                                  "layout": plotly_layout_dict,

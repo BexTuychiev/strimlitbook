@@ -93,7 +93,7 @@ def _display_plotly(fig_dict: dict):
 
     fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
 
-    if "config" in fig_dict.keys():
+    if fig_dict['config'] is not None:
         st.plotly_chart(fig, config=fig_dict['config'])
     else:
         st.plotly_chart(fig)
