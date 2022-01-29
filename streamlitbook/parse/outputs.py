@@ -40,9 +40,27 @@ def parse_plotly_output(output):
 def parse_html_output(output):
     parsed_output = dict()
 
-    if "text/html" in output['data'].keys():
-        parsed_output['html'] = ''.join(output['data']['text/html'])
+    if output['output_type'] in ("display_data", "execute_result"):
+        if "text/html" in output['data'].keys():
+            parsed_output['html'] = ''.join(output['data']['text/html'])
+        else:
+            parsed_output = None
     else:
         parsed_output = None
 
     return parsed_output
+
+
+def parse_image_output(output):
+    parsed_output = dict()
+
+    if output['output_type'] in ("display_data", "execute_result"):
+        if "image/png" in output['data'].keys():
+            parsed_output['image'] = output['data']['image/png'].strip()
+        else:
+            parsed_output = None
+    else:
+        parsed_output = None
+
+    return parsed_output
+
