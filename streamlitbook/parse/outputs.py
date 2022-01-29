@@ -64,3 +64,13 @@ def parse_image_output(output):
 
     return parsed_output
 
+
+def parse_error_outputs(output):
+    parsed_output = dict()
+
+    if output['output_type'] == "error":
+        parsed_output['error'] = output['ename']
+    else:
+        parsed_output = None
+
+    return parsed_output
