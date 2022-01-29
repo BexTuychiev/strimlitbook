@@ -3,7 +3,6 @@ A module that contains utility functions.
 """
 
 import base64
-import re
 from PIL import Image
 import io
 
