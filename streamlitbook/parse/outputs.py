@@ -42,7 +42,7 @@ def _parse_html_output(output):
 
     if output['output_type'] in ("display_data", "execute_result"):
         if "text/html" in output['data'].keys():
-            parsed_output['html'] = ''.join(output['data']['text/html'])
+            parsed_output['text/html'] = ''.join(output['data']['text/html'])
         else:
             parsed_output = None
     else:
@@ -56,7 +56,7 @@ def _parse_image_output(output):
 
     if output['output_type'] in ("display_data", "execute_result"):
         if "image/png" in output['data'].keys():
-            parsed_output['image'] = output['data']['image/png'].strip()
+            parsed_output['image/png'] = output['data']['image/png'].strip()
         else:
             parsed_output = None
     else:
