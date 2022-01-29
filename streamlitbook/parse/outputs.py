@@ -69,7 +69,8 @@ def _parse_plain_text_output(output):
     parsed_output = dict()
 
     if output['output_type'] in ("display_data", "execute_result"):
-        if "text/plain" in output['data'].keys():
+        if ("text/plain" in output['data'].keys()) and \
+                ("text/html" not in output['data'].keys()):
             parsed_output['text/plain'] = ''.join(output['data']['text/plain'])
         else:
             parsed_output = None
