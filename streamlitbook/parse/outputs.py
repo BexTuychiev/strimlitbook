@@ -65,6 +65,20 @@ def parse_image_output(output):
     return parsed_output
 
 
+def parse_plain_text_output(output):
+    parsed_output = dict()
+
+    if output['output_type'] in ("display_data", "execute_result"):
+        if "text/plain" in output['data'].keys():
+            parsed_output['text/plain'] = ''.join(output['data']['text/plain'])
+        else:
+            parsed_output = None
+    else:
+        parsed_output = None
+
+    return parsed_output
+
+
 def parse_error_outputs(output):
     parsed_output = dict()
 
