@@ -35,3 +35,14 @@ def parse_plotly_output(output):
         parsed_output = None
 
     return parsed_output
+
+
+def parse_html_output(output):
+    parsed_output = dict()
+
+    if "text/html" in output['data'].keys():
+        parsed_output['html'] = ''.join(output['data']['text/html'])
+    else:
+        parsed_output = None
+
+    return parsed_output
