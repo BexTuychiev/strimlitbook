@@ -11,6 +11,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from ..utilities import _display_image, _display_dataframe, \
     _display_plotly, _display_vega_lite
+from outputs import *
 
 
 class StreamlitBook:

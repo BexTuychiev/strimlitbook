@@ -1,4 +1,4 @@
-def parse_stream(output):
+def _parse_stream(output):
     parsed_output = dict()
 
     if output['output_type'] == "stream":
@@ -9,7 +9,7 @@ def parse_stream(output):
     return parsed_output
 
 
-def parse_plotly_output(output):
+def _parse_plotly_output(output):
     parsed_output = dict()
 
     # If output type is either display_data or execute_result, the output is media type
@@ -37,7 +37,7 @@ def parse_plotly_output(output):
     return parsed_output
 
 
-def parse_html_output(output):
+def _parse_html_output(output):
     parsed_output = dict()
 
     if output['output_type'] in ("display_data", "execute_result"):
@@ -51,7 +51,7 @@ def parse_html_output(output):
     return parsed_output
 
 
-def parse_image_output(output):
+def _parse_image_output(output):
     parsed_output = dict()
 
     if output['output_type'] in ("display_data", "execute_result"):
@@ -65,7 +65,7 @@ def parse_image_output(output):
     return parsed_output
 
 
-def parse_plain_text_output(output):
+def _parse_plain_text_output(output):
     parsed_output = dict()
 
     if output['output_type'] in ("display_data", "execute_result"):
@@ -79,7 +79,7 @@ def parse_plain_text_output(output):
     return parsed_output
 
 
-def parse_error_outputs(output):
+def _parse_error_outputs(output):
     parsed_output = dict()
 
     if output['output_type'] == "error":
