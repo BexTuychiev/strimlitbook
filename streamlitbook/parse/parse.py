@@ -184,19 +184,21 @@ class Code(Cell):
         if len(self._raw_data['outputs']) == 0:
             return None
 
-        # Empty list to store each output of a cell as a dictionary
-        outputs = []
+        # Store all parsing functions in the order of importance
         parsing_functions = [_parse_stream_output, _parse_plotly_output,
                              _parse_html_output, _parse_image_output,
                              _parse_plain_text_output, _parse_error_output]
 
+        # Empty list to store parsed outputs
+        outputs = list()
+
+        # For each output of the cell
         for output in self._raw_data['outputs']:
-
+            # Try to parse the output with each parsing function
             for func in parsing_functions:
-                if func(output):
-                    outputs.append(func(output))
+                outputs.append(func(output) if func(output) else None)
 
-        return outputs
+        return [o for o in outputs if o is not None]
 
     def _display_source(self):
         """Lower-level method to display cell code with Streamlit"""
