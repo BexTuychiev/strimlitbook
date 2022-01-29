@@ -1,4 +1,4 @@
-def _parse_stream(output):
+def _parse_stream_output(output):
     parsed_output = dict()
 
     if output['output_type'] == "stream":
@@ -79,7 +79,7 @@ def _parse_plain_text_output(output):
     return parsed_output
 
 
-def _parse_error_outputs(output):
+def _parse_error_output(output):
     parsed_output = dict()
 
     if output['output_type'] == "error":

@@ -11,7 +11,9 @@ import streamlit as st
 import plotly.graph_objects as go
 from ..utilities import _display_image, _display_dataframe, \
     _display_plotly, _display_vega_lite
-from outputs import *
+
+from outputs import _parse_error_output, _parse_stream_output, _parse_image_output, \
+    _parse_html_output, _parse_plotly_output, _parse_plain_text_output
 
 
 class StreamlitBook:
@@ -189,6 +191,9 @@ class Code(Cell):
 
         # Empty list to store each output of a cell as a dictionary
         outputs = []
+        parsing_functions = [_parse_stream, _parse_plotly_output, _parse_html_output,
+                             _parse_image_output, _parse_plain_text_output,
+                             _parse_error_outputs]
         for output in self._raw_data['outputs']:
             output_dict = {}
 
