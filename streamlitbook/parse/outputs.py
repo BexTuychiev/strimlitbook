@@ -39,9 +39,11 @@ def _parse_plotly_output(output):
 
 def _parse_html_output(output):
     parsed_output = dict()
+    plotly_key = "application/vnd.plotly.v1+json"
 
     if output['output_type'] in ("display_data", "execute_result"):
-        if "text/html" in output['data'].keys():
+        if ("text/html" in output['data'].keys()) and \
+                (plotly_key not in output['data'].keys()):
             parsed_output['text/html'] = ''.join(output['data']['text/html'])
         else:
             parsed_output = None
@@ -53,8 +55,10 @@ def _parse_html_output(output):
 
 def _parse_image_output(output):
     parsed_output = dict()
+    plotly_key = "application/vnd.plotly.v1+json"
 
-    if output['output_type'] in ("display_data", "execute_result"):
+    if (output['output_type'] in ("display_data", "execute_result")) and \
+            (plotly_key not in output['data'].keys()):
         if "image/png" in output['data'].keys():
             parsed_output['image/png'] = output['data']['image/png'].strip()
         else:
