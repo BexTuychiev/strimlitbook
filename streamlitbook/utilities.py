@@ -60,7 +60,7 @@ def _display_image(image_string: str):
     pil_image_white.paste(pil_image_colored, (0, 0))
 
     # Display the final image with streamlit
-    st.image(pil_image_white, use_column_width='always')
+    st.image(pil_image_white, use_column_width="auto")
 
 
 def _display_dataframe(html_df: str):
