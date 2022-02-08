@@ -71,7 +71,8 @@ class StreamlitBook:
         book1 = self._cell_dict[:idx_to_split]
         book2 = self._cell_dict[idx_to_split:]
 
-        return self.__class__(book1), self.__class__(book2)
+        return self.__class__(book1, self._metadata), self.__class__(book2,
+                                                                     self._metadata)
 
 
 class Cell:
