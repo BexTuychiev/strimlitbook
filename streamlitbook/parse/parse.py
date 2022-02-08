@@ -2,7 +2,7 @@
 A module that contains classes to deal with Jupyter Notebooks
 """
 import re
-
+from functools import partial
 import streamlit as st
 from ..utilities import _display_image, _display_dataframe, \
     _display_plotly, _display_vega_lite
@@ -220,13 +220,14 @@ class Code(Cell):
         if self._outputs is None:
             return None
 
+        _display_code = partial(st.code, language=self._language)
         display_keys = {
             "plotly_fig": _display_plotly,
             "altair_fig": _display_vega_lite,
             "text/html": _display_dataframe,
             "image/png": _display_image,
-            "text/plain": lambda x: st.code(x),
-            "stdout": lambda x: st.code(x),
+            "text/plain": lambda x: _display_code,
+            "stdout": lambda x: _display_code,
             "error": lambda x: st.error(x)
         }
 
