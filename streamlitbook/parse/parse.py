@@ -14,11 +14,12 @@ from .outputs import _parse_error_output, _parse_stream_output, _parse_image_out
 class StreamlitBook:
     """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
 
-    def __init__(self, cell_dicts):
+    def __init__(self, cells, metadata):
         self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for
-                       cell in cell_dicts]
-        self._cell_dict = cell_dicts
+                       cell in cells]
+        self._cell_dict = cells
         self._n_cells = len(self._cells)
+        self._metadata = metadata
 
     @property
     def cells(self):
