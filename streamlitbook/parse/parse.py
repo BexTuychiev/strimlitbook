@@ -2,7 +2,7 @@
 A module that contains classes to deal with Jupyter Notebooks
 """
 import re
-
+from functools import partial
 import streamlit as st
 from ..utilities import _display_image, _display_dataframe, \
     _display_plotly, _display_vega_lite
@@ -14,10 +14,14 @@ from .outputs import _parse_error_output, _parse_stream_output, _parse_image_out
 class StreamlitBook:
     """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
 
-    def __init__(self, cell_dicts):
-        self._cells = [Code(cell) if cell['cell_type'] == 'code' else Markdown(cell) for
-                       cell in cell_dicts]
-        self._cell_dict = cell_dicts
+    def __init__(self, cells, metadata):
+        self._metadata = metadata
+        self._code_language = self._metadata["kernelspec"]["language"]
+        self._cells = [
+            Code(cell, self._code_language) if cell['cell_type'] == 'code' else
+            Markdown(cell) for cell in cells
+        ]
+        self._cell_dict = cells
         self._n_cells = len(self._cells)
 
     @property
@@ -70,7 +74,8 @@ class StreamlitBook:
         book1 = self._cell_dict[:idx_to_split]
         book2 = self._cell_dict[idx_to_split:]
 
-        return self.__class__(book1), self.__class__(book2)
+        return self.__class__(book1, self._metadata), self.__class__(book2,
+                                                                     self._metadata)
 
 
 class Cell:
@@ -172,9 +177,10 @@ class Markdown(Cell):
 class Code(Cell):
     """Extension of the generic Cell class to represent code cells with more features."""
 
-    def __init__(self, cell_dict: dict):
+    def __init__(self, cell_dict: dict, code_language):
         super().__init__(cell_dict)
         self._raw_data = cell_dict
+        self._language = code_language
 
     @property
     def _outputs(self):
@@ -214,13 +220,14 @@ class Code(Cell):
         if self._outputs is None:
             return None
 
+        _display_code = partial(st.code, language=self._language)
         display_keys = {
             "plotly_fig": _display_plotly,
             "altair_fig": _display_vega_lite,
             "text/html": _display_dataframe,
             "image/png": _display_image,
-            "text/plain": lambda x: st.code(x),
-            "stdout": lambda x: st.code(x),
+            "text/plain": lambda x: _display_code,
+            "stdout": lambda x: _display_code,
             "error": lambda x: st.error(x)
         }
 
