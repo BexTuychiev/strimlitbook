@@ -24,6 +24,12 @@ class StreamlitBook:
         self._cell_dict = cells
         self._n_cells = len(self._cells)
 
+    def __getitem__(self, idx):
+        if isinstance(idx, slice):
+            indices = range(*idx.indices(self._n_cells))
+            return [self._cells[i] for i in indices]
+        return self._cells[idx]
+
     @property
     def cells(self):
         return self._cells
