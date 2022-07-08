@@ -13,9 +13,9 @@ setup(
     long_description=README,
     long_description_content_type="text/markdown",
     url='https://github.com/BexTuychiev/streamlitbook',
-    name='streamlitbook',
+    name='strimlitbook',
     version='0.1.0',
-    packages=find_packages(include=['streamlitbook', 'streamlitbook.*']),
+    packages=find_packages(include=['strimlitbook', 'strimlitbook.*']),
     install_requires=['streamlit', 'numpy', 'pandas', 'plotly', 'Pillow'],
     python_requires='>=3.7'
 )
