@@ -1,7 +1,7 @@
 # pyproject.toml
 
 [build-system]
-requires = ["setuptools>=61.0.0", "wheel"]
+requires = ["setuptools>=61.0.0", "wheel", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
@@ -9,6 +9,10 @@ where = ["."]
 include = ["mypackage*"]
 exclude = ["images*"]
 namespaces = false
+
+[tool.setuptools.dynamic]
+version = { attr = "strimlitbook.VERSION" }
+readme = { file = ["README.md"] }
 
 [project]
 name = "strimlitbook"
@@ -31,28 +35,3 @@ requires-python = ">=3.8"
 
 [project.urls]
 Homepage = "https://github.com/BexTuychiev/strimlitbook"
-
-[tool.bumpver]
-current_version = "0.1.0"
-version_pattern = "MAJOR.MINOR.PATCH"
-commit_message = "bump version {old_version} -> {new_version}"
-commit = true
-tag = true
-push = false
-
-[tool.bumpver.file_patterns]
-"pyproject.toml" = [
-    'current_version = "{version}"',
-]
-"./strimlitbook/__init__.py" = ["{version}"]
-
-"setup.py" = [
-    "{version}",
-    "{pep440_version}",
-]
-
-"README.md" = [
-    "{version}",
-    "{pep440_version}",
-]
-
