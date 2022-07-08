@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["mypackage*"]
+include = ["strimlitbook*"]
 exclude = ["images*"]
 namespaces = false
 
