@@ -12,7 +12,7 @@ setup(
     description='A package to convert Jupyter Notebooks to Streamlit web apps.',
     long_description=README,
     long_description_content_type="text/markdown",
-    url='https://github.com/BexTuychiev/streamlitbook',
+    url='https://github.com/BexTuychiev/strimlitbook',
     name='strimlitbook',
     version='0.1.0',
     packages=find_packages(include=['strimlitbook', 'strimlitbook.*']),
