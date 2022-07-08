@@ -1,0 +1,27 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "strimlitbook"
+version = "0.1.0"
+description = "Convert Jupyter Notebooks to identical Streamlit web apps."
+readme = "README.md"
+authors = [{ name = "Bekhruz (Bex) Tuychiev", email = "bex@ibexprogramming.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["streamlit", "strimlitbook", "jupyter",
+    "jupyter notebook", "notebook", "web app"]
+dependencies = [
+    'streamlit', 'numpy', 'pandas', 'plotly', 'Pillow'
+]
+requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://github.com/BexTuychiev/strimlitbook"
