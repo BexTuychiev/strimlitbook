@@ -12,9 +12,33 @@ from .outputs import _parse_error_output, _parse_stream_output, _parse_image_out
 
 
 class StreamlitBook:
-    """Main class to represent Jupyter Notebooks as Streamlit-compatible components"""
+    """
+    Main class to represent Jupyter Notebooks as Streamlit-compatible components
+
+    Attributes
+    ----------
+    cells : list
+        A list of Code or Markdown cells parsed from the notebook
+    n_cells : int
+        The total number of cells in the notebook. Only counts code and markdown cells.
+        Raw cells are ignored.
+
+    Methods
+    -------
+    display()
+        High-level function to display each cell input and output with corresponding
+         Streamlit functions.
+    """
 
     def __init__(self, cells, metadata):
+        """
+        Parameters
+        ----------
+        cells : list
+            A list of Code/Markdown cells parsed from the raw JSON notebook code.
+        metadata : dict
+            A dictionary containing the metadata of the notebook.
+        """
         self._metadata = metadata
         self._code_language = self._metadata["kernelspec"]["language"]
         self._cells = [
@@ -23,12 +47,6 @@ class StreamlitBook:
         ]
         self._cell_dict = cells
         self._n_cells = len(self._cells)
-
-    def __getitem__(self, idx):
-        if isinstance(idx, slice):
-            indices = range(*idx.indices(self._n_cells))
-            return [self._cells[i] for i in indices]
-        return self._cells[idx]
 
     @property
     def cells(self):
@@ -55,10 +73,32 @@ class StreamlitBook:
         custom_str = f"<StreamlitBook with {self.n_cells} cells>"
         return custom_str
 
+    def __getitem__(self, idx: int):
+        """
+        Get the cell at the given index.
+        Parameters
+        ----------
+        idx : int
+            The index of the cell to get.
+
+        Returns
+        -------
+            cell: Code, Markdown
+                The extracted cell.
+        """
+        if isinstance(idx, slice):
+            indices = range(*idx.indices(self._n_cells))
+            return [self._cells[i] for i in indices]
+        return self._cells[idx]
+
     def display(self):
         """
         High-level function to display each cell as a
         Streamlit component with outputs.
+
+        Notes
+        -----
+            See the display function of Code and Markdown classes
         """
         for cell in self.cells:
             cell.display()
@@ -75,7 +115,7 @@ class StreamlitBook:
 
         Returns
         -------
-        A tuple of two StreamlitBook instances.
+            tuple: A tuple of two StreamlitBook instances.
         """
         book1 = self._cell_dict[:idx_to_split]
         book2 = self._cell_dict[idx_to_split:]
@@ -85,9 +125,27 @@ class StreamlitBook:
 
 
 class Cell:
-    """Generic cell class to make Jupyter Notebook cells streamlit-compatible"""
+    """
+    Generic cell class to make Jupyter Notebook cells streamlit-compatible.
+
+    Attributes
+    ----------
+    type : str
+        The type of the cell - either code or markdown
+    metadata : dict
+        The metadata of the cell. Contains the cell's tags and attachments.
+    source : str
+        The source code of the cell. Either code or markdown.
+    """
 
     def __init__(self, cell_dict: dict):
+        """
+        Parameters
+        ----------
+        cell_dict : dict
+            A dictionary containing the cell's metadata, source and
+            outputs if the cell is a code cell.
+        """
         self._type = cell_dict['cell_type']
         self._metadata = cell_dict['metadata']
         self._source = "".join(cell_dict['source'])
@@ -128,8 +186,7 @@ class Cell:
 
 class Markdown(Cell):
     """
-    Extension of the generic Cell class
-    to represent Markdown cells with more features.
+    Subclass of the Cell class to represent Markdown cells with more features.
     """
 
     def __init__(self, cell_dict: dict):
@@ -139,27 +196,41 @@ class Markdown(Cell):
 
     @property
     def _attachments(self):
-        """Parse cell attachments into an attribute"""
+        """
+        Parse cell attachments into an attribute.
+
+        Returns
+        -------
+        attach_list : list
+            A list of strings of the attachment contents.
+        """
+        # An empty list to store parsed attachments
         attach_list = list()
+
+        # If there are attachments
         if self._raw_attachments:
+            # For each attachment
             for _, attachment in self._raw_attachments.items():
+                # Get the contents of each attachment
                 for _, value in attachment.items():
                     attach_list.append(value)
         return attach_list
 
     def _display_parsing_attachments(self):
         """
-        Lower-level display method of markdown cells that parses attachments (if any)
-        and display in proper media format with streamlit.
+        Lower-level display method that parses attachments (if any)
+        and displays them in proper media format with streamlit.
         """
 
         if self._attachments:
             # Split the raw Markdown code at every line that has attachments
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
+
             for index, source in enumerate(splitted_source):
                 st.markdown(
                     source)  # TODO check if HTML works inside cells with attachments
                 try:
+                    # TODO check if the below function works with GIFs
                     _display_image(self._attachments[index])
                 except IndexError:
                     pass
@@ -171,9 +242,12 @@ class Markdown(Cell):
         Higher-level function to display Markdown cells as streamlit components.
         Display is performed based on tags.
         """
+
         if 'skip' in self._tags:
+            # Skip the markdown cell
             return None
         elif 'ci' in self._tags:
+            # Create a collapsed markdown cell in Streamlit
             with st.expander("See collapsed cell"):
                 self._display_parsing_attachments()
         else:
@@ -181,7 +255,9 @@ class Markdown(Cell):
 
 
 class Code(Cell):
-    """Extension of the generic Cell class to represent code cells with more features."""
+    """
+    Subclass of the Cell class to represent code cells with more features.
+    """
 
     def __init__(self, cell_dict: dict, code_language):
         super().__init__(cell_dict)
@@ -190,12 +266,15 @@ class Code(Cell):
 
     @property
     def _outputs(self):
-        """Parse outputs of a cell as an attribute for ease of access."""
+        """
+        Parse outputs of a cell as an attribute for ease of access.
+        """
 
         # Check if there are any outputs
         if len(self._raw_data['outputs']) == 0:
             return None
 
+        # TODO figure out why text and stream outputs aren't being displayed
         # Store all parsing functions in the order of importance
         parsing_functions = [_parse_stream_output, _parse_plotly_output,
                              _parse_html_output, _parse_image_output,
@@ -208,12 +287,15 @@ class Code(Cell):
         for output in self._raw_data['outputs']:
             # Try to parse the output with each parsing function
             for func in parsing_functions:
+                # TODO check if this can be simplified
                 outputs.append(func(output) if func(output) else None)
 
         return [o for o in outputs if o is not None]
 
     def _display_source(self):
-        """Lower-level method to display cell code with Streamlit"""
+        """
+        Lower-level method to display cell code with Streamlit
+        """
         if len(self.source) > 0:
             st.code(self.source)
 
@@ -226,12 +308,19 @@ class Code(Cell):
         if self._outputs is None:
             return None
 
+        # First, create a function to display code output with always the same
+        # language as the cell. Created mainly for Julia and R code cells.
+        # Because the default is Python.
         _display_code = partial(st.code, language=self._language)
+
+        # Now, map outputs to their _display_* functions
         display_keys = {
             "plotly_fig": _display_plotly,
             "altair_fig": _display_vega_lite,
             "text/html": _display_dataframe,
             "image/png": _display_image,
+            # TODO check if lambda can be removed to fix the bug where text
+            #  outputs are not being displayed
             "text/plain": lambda x: _display_code,
             "stdout": lambda x: _display_code,
             "error": lambda x: st.error(x)
@@ -242,7 +331,9 @@ class Code(Cell):
                 display_keys[key](value)
 
     def display(self):
-        """High-level display function to combine cell source and outputs using tags."""
+        """
+        High-level display function to display cell source and outputs based on tags.
+        """
 
         if 'skip' in self._tags:
             return None
