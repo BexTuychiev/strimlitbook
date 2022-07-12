@@ -19,7 +19,8 @@ def read_ipynb(path: str) -> StreamlitBook:
 
     Returns
     -------
-    An instance of StreamlitBook
+    notebook: StreamlitBook
+        An instance of StreamlitBook class.
     """
     with open(path, "rb") as file:
         raw_dict = json.load(file)
