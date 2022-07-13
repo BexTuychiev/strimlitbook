@@ -83,12 +83,15 @@ class StreamlitBook:
 
         Returns
         -------
-            cell: Code, Markdown
-                The extracted cell.
+            cell: Code, Markdown, StreamlitBook
+                The returned value is either a code or markdown cell if a single index
+                is given. If a slice object, a StreamlitBook instance is returned.
         """
         if isinstance(idx, slice):
             indices = range(*idx.indices(self._n_cells))
-            return [self._cells[i] for i in indices]
+            extracted_cells = [self._cells[i]._cell_dict for i in indices]
+
+            return StreamlitBook(extracted_cells, self._metadata)
         return self._cells[idx]
 
     def display(self):
@@ -150,6 +153,7 @@ class Cell:
         self._metadata = cell_dict['metadata']
         self._source = "".join(cell_dict['source'])
         self._tags = self._metadata.get("tags", [])
+        self._cell_dict = cell_dict
 
     @property
     def type(self):
