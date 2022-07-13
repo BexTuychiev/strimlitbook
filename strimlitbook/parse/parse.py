@@ -227,8 +227,7 @@ class Markdown(Cell):
             splitted_source = re.split(r"!\[.+]\(attachment:.+\)", self.source)
 
             for index, source in enumerate(splitted_source):
-                st.markdown(
-                    source)  # TODO check if HTML works inside cells with attachments
+                st.markdown(source, unsafe_allow_html=True)
                 try:
                     # TODO check if the below function works with GIFs
                     _display_image(self._attachments[index])
