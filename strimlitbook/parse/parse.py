@@ -274,7 +274,6 @@ class Code(Cell):
         if len(self._raw_data['outputs']) == 0:
             return None
 
-        # TODO figure out why text and stream outputs aren't being displayed
         # Store all parsing functions in the order of importance
         parsing_functions = [_parse_stream_output, _parse_plotly_output,
                              _parse_html_output, _parse_image_output,
@@ -319,10 +318,8 @@ class Code(Cell):
             "altair_fig": _display_vega_lite,
             "text/html": _display_dataframe,
             "image/png": _display_image,
-            # TODO check if lambda can be removed to fix the bug where text
-            #  outputs are not being displayed
-            "text/plain": lambda x: _display_code,
-            "stdout": lambda x: _display_code,
+            "text/plain": lambda x: _display_code(x),
+            "stdout": lambda x: _display_code(x),
             "error": lambda x: st.error(x)
         }
 
