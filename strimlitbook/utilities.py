@@ -47,7 +47,6 @@ def _display_image(image_string: str):
     ----------
     image_string: str :
         base64 encoded string of an image.
-
     """
     # Convert to bytes code from the image base64 string
     bytes_image = base64.decodebytes(str.encode(image_string))
@@ -74,6 +73,8 @@ def _display_dataframe(html_df: str):
         Raw HTML code that contains <table> tag.
     """
 
+    # TODO catch the exception where there aren't any tables in the html
+    # TODO work on the columns of the dataframes more closely
     df = pd.read_html(html_df)[0]
     df.rename(lambda x: "" if "Unnamed:" in x else x, axis='columns', inplace=True)
     st.dataframe(df.set_index(df.columns[0]))
@@ -92,6 +93,7 @@ def _display_plotly(fig_dict: dict):
 
     fig = go.Figure(dict(data=fig_dict['data'], layout=fig_dict['layout']))
 
+    # If config key exists in Plotly output dict, use it to override the default config
     if fig_dict['config'] is not None:
         st.plotly_chart(fig, config=fig_dict['config'])
     else:
@@ -106,7 +108,6 @@ def _display_vega_lite(vega_lite_spec: dict):
     ----------
     vega_lite_spec: dict :
         Altair chart dictionary spec parsed from raw outputs inside _outputs.
-
     """
 
     st.vega_lite_chart(spec=vega_lite_spec)
