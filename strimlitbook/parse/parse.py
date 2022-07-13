@@ -286,8 +286,9 @@ class Code(Cell):
         for output in self._raw_data['outputs']:
             # Try to parse the output with each parsing function
             for func in parsing_functions:
-                # TODO check if this can be simplified
-                outputs.append(func(output) if func(output) else None)
+                # TODO make sure that removing the ternary operator inside append
+                #  was not a mistake
+                outputs.append(func(output))
 
         return [o for o in outputs if o is not None]
 
