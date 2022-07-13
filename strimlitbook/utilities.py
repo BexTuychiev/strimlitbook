@@ -100,6 +100,7 @@ def _display_plotly(fig_dict: dict):
         st.plotly_chart(fig)
 
 
+# TODO check if altair charts can be rendered using st.markdown function
 def _display_vega_lite(vega_lite_spec: dict):
     """
     Static, lower-level method to display Altair charts.
