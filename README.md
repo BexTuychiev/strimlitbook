@@ -57,16 +57,19 @@ approaches were. Even if the creators wanted to do that, they had to turn to cru
 like linking to external links or docs where they outlined their approach.
 
 My idea was that developers should be able to do that right in the app itself. The process
-should be simple and take as little code as possible. And thus StreamlitBook was born.
+should be simple and require as little code as possible. And thus StrimlitBook was born.
 
-StreamlitBook is an API that allows you to convert Jupyter Notebooks to identical
+StrimlitBook is an API that allows you to convert Jupyter Notebooks to identical
 Streamlit components which you can embed right into your scripts where you build your
 Streamlit apps.
 
 Check out the getting started and usage sections for more details.
 
 P.S. the project is still in development. But you can expect a PyPI release early next
-month (July, 2022).
+year (2023).
+
+> Someone stole the name `streamlitbook` before I could publish the package on PyPI, so I changed the name to `strimlitbook`.
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With <small id='built-with'></small>
@@ -118,14 +121,14 @@ nb.display()
 
 ## Roadmap <small id='roadmap'></small>
 
-I am planning the initial release of the package on PyPI in July, 2022.
+I am planning the initial release of the package on PyPI in early 2023.
 After the initial release, I have got fantastic things planned for the library. Apart from
 many tiny quality-of-life features I am adding, my ultimate aim is to make the project a
 drop-in replacement
 to [the Jupyter Book project](https://jupyterbook.org/en/stable/intro.html).
 
 I am thinking
-that combining the awesome features and theme of Streamlit with StreamlitBook's notebook
+that combining the awesome features and theme of Streamlit with StrimlitBook's notebook
 parser can completely revolutionalize the way e-books are built as authors would have
 ultimate flexibility to make them as interactive as possible using Python logic right in
 the middle of a book page.
