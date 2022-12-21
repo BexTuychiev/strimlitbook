@@ -91,7 +91,7 @@ cloning. Here are the instructions:
 ### Installation <small id='installation'></small>
 
 ```bash
-git clone https://github.com/BexTuychiev/streamlitbook.git
+git clone https://github.com/BexTuychiev/strimlitbook.git
 pip install -r requirements.txt
 ```
 
@@ -105,7 +105,7 @@ To see your notebook as an app, simply paste this line of code into the script o
 Streamlit app:
 
 ```python
-from streamlitbook import read_ipynb
+from strimlitbook import read_ipynb
 
 nb = read_ipynb('path/to/your/notebook.ipynb')
 nb.display()
