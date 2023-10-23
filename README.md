@@ -121,7 +121,7 @@ nb.display()
 
 ## Roadmap <small id='roadmap'></small>
 
-I am planning the initial release of the package on PyPI in early 2023.
+I am planning the initial release of the package on PyPI in late 2023.
 After the initial release, I have got fantastic things planned for the library. Apart from
 many tiny quality-of-life features I am adding, my ultimate aim is to make the project a
 drop-in replacement
